@@ -14,7 +14,8 @@ class DangNhap extends StatefulWidget {
 
 class _DangNhapState extends State<DangNhap> {
   String? errorMessage = '';
-  bool isLogin = true;
+  // bool _isLogin = true;
+  bool _isVisibility = true;
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
@@ -73,21 +74,21 @@ class _DangNhapState extends State<DangNhap> {
               Padding(
                 padding: EdgeInsets.all(20),
                 child: TextField(
-                  obscureText: passToggle, //an mk
+                  obscureText: _isVisibility, //an mk
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     label: Text("nhập mật khẩu 6-12 ký tự"),
                     prefixIcon: Icon(Icons.lock),
                     suffixIcon: InkWell(
                       onTap: () {
-                        if (passToggle == true) {
-                          passToggle = false;
+                        if (_isVisibility == true) {
+                          _isVisibility = false;
                         } else {
-                          passToggle = true;
+                          _isVisibility = true;
                         }
                         setState(() {});
                       },
-                      child: passToggle
+                      child: _isVisibility
                           ? Icon(CupertinoIcons.eye_slash_fill)
                           : Icon(CupertinoIcons.eye_fill),
                     ),

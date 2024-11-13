@@ -10,23 +10,28 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: greyLightColor.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
+    return GestureDetector(
+      onTap: () {
+        print(icon);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: greyLightColor.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Image.asset(icon, width: 50, height: 50),
         ),
-        child: Image.asset(icon, width: 50, height: 50),
       ),
     );
   }

@@ -11,14 +11,21 @@ class Products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> listIcons = [
-      "assets/babel,mol.png",
+      "assets/babemol.jpg",
       "assets/durex.png",
       "assets/makeup.png",
       "assets/paracetamol.png",
       "assets/ruatay.png",
     ];
+     final List<String> listModel = [
+      "Babel",
+      "BCS",
+      "sua rua mat",
+      "paracetamol",
+      "lifebouy",
+    ];
     return SizedBox(
-      height: 90,
+      height: 200,
       child: ListView.builder(
         itemCount: listIcons.length,
         scrollDirection: Axis.horizontal,
@@ -27,7 +34,10 @@ class Products extends StatelessWidget {
           horizontal: 10,
         ),
         itemBuilder: (context, index) {
-          return ProductsCard(icon: listIcons[index]);
+          return ProductsCard(
+            icon: listIcons[index],
+            products_information: listModel[index],
+          );
         },
       ),
     );
