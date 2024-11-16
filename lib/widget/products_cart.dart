@@ -4,12 +4,12 @@ import 'package:flutter_application_3/theme.dart';
 class ProductsCard extends StatelessWidget {
   final String icon;
 
-  final String products_information;
+  final String productsinformation;
 
   const ProductsCard({
     super.key,
     required this.icon,
-    required this.products_information,
+    required this.productsinformation,
   });
 
   @override
@@ -21,12 +21,12 @@ class ProductsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             // color: grey35Color.withOpacity(5.0),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: const Offset(0, 0),
+            offset: Offset(0, 0),
           )
         ],
       ),
@@ -34,7 +34,7 @@ class ProductsCard extends StatelessWidget {
         children: [
           Image.asset(icon, width: 70, height: 90),
           Text(
-            products_information,
+            productsinformation,
             style: TextStyle(
                 color: blackColor, fontSize: 15, fontWeight: FontWeight.bold),
           ),

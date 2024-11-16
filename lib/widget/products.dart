@@ -36,7 +36,7 @@ class Products extends StatelessWidget {
         itemBuilder: (context, index) {
           return ProductsCard(
             icon: listIcons[index],
-            products_information: listModel[index],
+            productsinformation: listModel[index],
           );
         },
       ),
