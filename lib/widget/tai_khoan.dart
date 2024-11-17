@@ -6,6 +6,7 @@ import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
 // ignore: unused_import
 import 'package:flutter_application_3/widget/dang_ky.dart';
+
 class TaiKhoan extends StatefulWidget {
   @override
   State<TaiKhoan> createState() => _TaiKhoanState();
@@ -36,7 +37,10 @@ class _TaiKhoanState extends State<TaiKhoan> {
                       children: const [
                         Text(
                           "Hoàng Minh",
-                          style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "0906 680 225",
@@ -47,7 +51,8 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     Spacer(),
                     Column(
                       children: const [
-                        Icon(Icons.monetization_on, color: Colors.yellow, size: 24),
+                        Icon(Icons.monetization_on,
+                            color: Colors.yellow, size: 24),
                         Text("200", style: TextStyle(color: Colors.white)),
                       ],
                     ),
@@ -65,7 +70,9 @@ class _TaiKhoanState extends State<TaiKhoan> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
-                    Text("Đơn của tôi", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text("Đơn của tôi",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
                     Text("Xem tất cả", style: TextStyle(color: Colors.blue)),
                   ],
                 ),
@@ -79,8 +86,10 @@ class _TaiKhoanState extends State<TaiKhoan> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildOrderStatusButton(Icons.local_shipping, "Đang xử lý"),
-                      _buildOrderStatusButton(Icons.directions_bike, "Đang giao"),
+                      _buildOrderStatusButton(
+                          Icons.local_shipping, "Đang xử lý"),
+                      _buildOrderStatusButton(
+                          Icons.directions_bike, "Đang giao"),
                       _buildOrderStatusButton(Icons.check_circle, "Đã giao"),
                       _buildOrderStatusButton(Icons.refresh, "Đổi/Trả"),
                     ],
@@ -96,17 +105,23 @@ class _TaiKhoanState extends State<TaiKhoan> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Tài khoản", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text("Tài khoản",
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 SizedBox(height: 8),
                 Card(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                   child: Column(
                     children: [
                       _buildAccountOption(Icons.qr_code, "Mã QR của tôi"),
                       _buildAccountOption(Icons.person, "Thông tin cá nhân"),
-                      _buildAccountOption(Icons.location_on, "Quản lý sổ địa chỉ"),
-                      _buildAccountOption(Icons.credit_card, "Quản lý thẻ thanh toán"),
-                      _buildAccountOption(Icons.medical_services, "Đơn thuốc của tôi"),
+                      _buildAccountOption(
+                          Icons.location_on, "Quản lý sổ địa chỉ"),
+                      _buildAccountOption(
+                          Icons.credit_card, "Quản lý thẻ thanh toán"),
+                      _buildAccountOption(
+                          Icons.medical_services, "Đơn thuốc của tôi"),
                     ],
                   ),
                 ),
@@ -120,7 +135,8 @@ class _TaiKhoanState extends State<TaiKhoan> {
             child: ElevatedButton(
               onPressed: () {
                 // Handle logout functionality here
-                Navigator.pushReplacementNamed(context, '/login'); // Example: Navigate to login screen
+                Navigator.pushReplacementNamed(
+                    context, '/login'); // Example: Navigate to login screen
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -138,16 +154,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
         ],
       ),
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4, // Index for "Tài khoản"
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: "Điểm thưởng"),
-          BottomNavigationBarItem(icon: Icon(Icons.support), label: "Tư vấn"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Giỏ hàng"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Tài khoản"),
-        ],
-      ),
     );
   }
 
