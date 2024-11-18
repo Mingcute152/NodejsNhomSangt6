@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/widget/product_detail.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -12,7 +13,13 @@ class ProductsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProductDetailScreen(),
+            ));
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.transparent,
@@ -45,16 +52,19 @@ class ProductsCard extends StatelessWidget {
                 Positioned(
                   top: 5,
                   left: 5,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    padding: const EdgeInsets.all(6),
-                    child: const Icon(
-                      PhosphorIconsBold.heart,
-                      size: 13,
-                      color: Colors.black,
+                  child: GestureDetector(
+                    onTap: () {} ,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      padding: const EdgeInsets.all(6),
+                      child: const Icon(
+                        PhosphorIconsBold.heart,
+                        size: 13,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 )
@@ -86,7 +96,7 @@ class ProductsCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '${productModel.price.round().toString()} Vnđ',
+                          productModel.priceString,
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 13,

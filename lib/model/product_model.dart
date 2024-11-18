@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ProductModel {
   final String image;
   final String title;
@@ -10,6 +12,16 @@ class ProductModel {
     required this.description,
     required this.price,
   });
+
+  String get priceString {
+    final formatter = NumberFormat.currency(
+      locale: 'vi_VN',
+      symbol: 'VNĐ',
+      decimalDigits: 0,
+    );
+
+    return formatter.format(price);
+  }
 }
 
 final List<ProductModel> products = [
@@ -17,7 +29,7 @@ final List<ProductModel> products = [
     image: 'assets/pharmox.png',
     title: 'Pharmox',
     description: 'Pharmacy',
-    price: 200000,
+    price: 20000,
   ),
   ProductModel(
     image: 'assets/durex.png',

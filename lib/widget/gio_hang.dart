@@ -54,10 +54,14 @@ class GioHangState extends State<GioHang> {
                       ),
                     );
                   },
-                  child: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                    color: Colors.green,
+                  child:  Positioned(
+                    left: 40,
+                    top: 30,
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 30,
+                      color: Colors.green,
+                    ),
                   ),
                 ),
                 Padding(
