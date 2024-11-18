@@ -86,7 +86,7 @@ class ProductsCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '${productModel.price.round().toString()}đ',
+                          '${productModel.price.round().toString()} Vnđ',
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 13,
