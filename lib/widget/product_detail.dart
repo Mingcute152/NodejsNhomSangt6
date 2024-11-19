@@ -9,7 +9,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int quantity = 1; // Số lượng sản phẩm
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -125,9 +125,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               color: Colors.green[300],
                             ),
                           ),
-                          Text(
-                            quantity.toString(),
-                            style: const TextStyle(fontSize: 18),
+                          const Text(
+                           '1',
+                            style: TextStyle(fontSize: 18),
                           ),
                           IconButton(
                             onPressed: () {},
