@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/navbar_root.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
@@ -37,7 +38,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   left: 10,
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back, size: 30),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          // ignore: prefer_const_constructors
+                          builder: (context) => NavBarRoots(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Center(

@@ -145,7 +145,7 @@ class _DangNhapState extends State<DangNhap> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ManHinhDangNhap(),
+                            builder: (context) => ManHinhDangKy(),
                           ));
                     },
                     child: Text(

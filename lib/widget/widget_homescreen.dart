@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/dang_ky.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
 import 'package:flutter_application_3/widget/navbar_root.dart';
 
@@ -58,7 +59,7 @@ class WellcomeHomesreen extends StatelessWidget {
                 wordSpacing: 1,
               ),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -94,7 +95,7 @@ class WellcomeHomesreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DangNhap(),
+                            builder: (context) => ManHinhDangKy(),
                           ));
                     },
                     child: Padding(

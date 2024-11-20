@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
 
-class ManHinhDangNhap extends StatefulWidget {
+class ManHinhDangKy extends StatefulWidget {
   @override
-  State<ManHinhDangNhap> createState() => _ManHinhDangNhapState();
+  State<ManHinhDangKy> createState() => _ManHinhDangKyState();
 }
 
-class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
+class _ManHinhDangKyState extends State<ManHinhDangKy> {
   bool passToggle = true;
   @override
   Widget build(BuildContext context) {
