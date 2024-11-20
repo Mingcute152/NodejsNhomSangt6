@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/widget/dang_ky.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
+// ignore: unused_import
 import 'package:flutter_application_3/widget/navbar_root.dart';
 
 class WellcomeHomesreen extends StatelessWidget {
@@ -16,23 +17,7 @@ class WellcomeHomesreen extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NavBarRoots(),
-                      ));
-                },
-                child: Text(
-                  "tiếp theo",
-                  style: TextStyle(color: greenColor, fontSize: 20),
-                ),
-              ),
-            ),
+           
             const SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.all(1),
