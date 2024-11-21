@@ -25,7 +25,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Container(
                 height: 250,
                 decoration: BoxDecoration(
-                  color: Colors.green[300],
+                  color: Colors.green[100],
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),

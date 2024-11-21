@@ -33,7 +33,13 @@ class GioHangState extends State<GioHang> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NavBarRoots(),
+                          ));
+                    },
                   ),
                   const SizedBox(width: 8),
                   const Text(
@@ -67,7 +73,13 @@ class GioHangState extends State<GioHang> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {});
+                      setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NavBarRoots(),
+                            ));
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: greenColor,
