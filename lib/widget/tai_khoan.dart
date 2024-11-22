@@ -24,7 +24,9 @@ class _TaiKhoanState extends State<TaiKhoan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tài Khoản"),
+        title: const Text(
+          "Tài Khoản",
+        ),
         backgroundColor: greenColor,
       ),
       body: ListView(
@@ -40,7 +42,11 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     CircleAvatar(
                       radius: 30,
                       backgroundColor: whiteColor,
-                      child: Icon(Icons.person, size: 40, color: greenColor),
+                      child: Icon(
+                        Icons.person,
+                        size: 40,
+                        color: greenColor,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Column(
@@ -57,18 +63,14 @@ class _TaiKhoanState extends State<TaiKhoan> {
                           _user?.phoneNumber ??
                               _user?.email ??
                               'Chưa có thông tin',
-                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                     const Spacer(),
-                    const Column(
-                      children: [
-                        Icon(Icons.monetization_on,
-                            color: Colors.yellow, size: 24),
-                        Text("200", style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
                   ],
                 ),
               ],
@@ -77,16 +79,28 @@ class _TaiKhoanState extends State<TaiKhoan> {
 
           // Order Status Section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 16,
+            ),
             child: Column(
               children: [
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Đơn của tôi",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    Text("Xem tất cả", style: TextStyle(color: Colors.blue)),
+                    Text(
+                      "Đơn của tôi",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "Xem tất cả",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -97,14 +111,25 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
+                    
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildOrderStatusButton(
-                          Icons.local_shipping, "Đang xử lý"),
+                        Icons.local_shipping,
+                        "Đang xử lý",
+                      ),
                       _buildOrderStatusButton(
-                          Icons.directions_bike, "Đang giao"),
-                      _buildOrderStatusButton(Icons.check_circle, "Đã giao"),
-                      _buildOrderStatusButton(Icons.refresh, "Đổi/Trả"),
+                        Icons.directions_bike,
+                        "Đang giao",
+                      ),
+                      _buildOrderStatusButton(
+                        Icons.check_circle,
+                        "Đã giao",
+                      ),
+                      _buildOrderStatusButton(
+                        Icons.refresh,
+                        "Đổi/Trả",
+                      ),
                     ],
                   ),
                 ),
@@ -118,21 +143,20 @@ class _TaiKhoanState extends State<TaiKhoan> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Tài khoản",
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const Text(
+                  "Tài khoản",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Card(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Column(
                     children: [
-                      _buildAccountOption(Icons.qr_code, "Mã QR của tôi"),
-                      _buildAccountOption(Icons.person, "Thông tin cá nhân"),
-                      _buildAccountOption(
-                          Icons.location_on, "Quản lý sổ địa chỉ"),
-                      _buildAccountOption(
-                          Icons.credit_card, "Quản lý thẻ thanh toán"),
                       _buildAccountOption(
                           Icons.medical_services, "Đơn thuốc của tôi"),
                     ],
@@ -147,13 +171,12 @@ class _TaiKhoanState extends State<TaiKhoan> {
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () async {
-                // Xử lý đăng xuất
                 await _auth.signOut();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          DangNhap()), // Điều hướng về màn hình đăng nhập
+                    builder: (context) => DangNhap(),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -165,7 +188,10 @@ class _TaiKhoanState extends State<TaiKhoan> {
               ),
               child: const Text(
                 "Đăng xuất",
-                style: TextStyle(fontSize: 19, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -178,9 +204,16 @@ class _TaiKhoanState extends State<TaiKhoan> {
   Widget _buildOrderStatusButton(IconData icon, String label) {
     return Column(
       children: [
-        Icon(icon, color: greenColor, size: 30),
+        Icon(
+          icon,
+          color: greenColor,
+          size: 30,
+        ),
         const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 12)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12),
+        ),
       ],
     );
   }
@@ -188,9 +221,16 @@ class _TaiKhoanState extends State<TaiKhoan> {
   // Helper method to build account option rows
   Widget _buildAccountOption(IconData icon, String label) {
     return ListTile(
-      leading: Icon(icon, color: greenColor),
+      leading: Icon(
+        icon,
+        color: greenColor,
+      ),
       title: Text(label),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: Colors.grey,
+      ),
       onTap: () {
         // Handle tap on each account option
       },
