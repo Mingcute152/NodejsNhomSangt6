@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/widget/product_detail.dart';
+import 'package:flutter_application_3/widget/product_detail_screen.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -15,10 +15,13 @@ class ProductsCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ProductDetailScreen(),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+              product: productModel,
+            ),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -53,7 +56,7 @@ class ProductsCard extends StatelessWidget {
                   top: 5,
                   left: 5,
                   child: GestureDetector(
-                    onTap: () {} ,
+                    onTap: () {},
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -79,17 +82,21 @@ class ProductsCard extends StatelessWidget {
                   children: [
                     Text(
                       productModel.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.black87,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
                       productModel.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.black54,
-                        fontSize: 12,
+                        fontSize: 10,
                       ),
                     ),
                     const Spacer(),

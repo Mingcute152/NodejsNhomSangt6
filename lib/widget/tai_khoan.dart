@@ -111,7 +111,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
-                    
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildOrderStatusButton(
@@ -175,7 +174,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DangNhap(),
+                    builder: (_) => DangNhap(),
                   ),
                 );
               },
