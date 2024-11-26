@@ -22,14 +22,14 @@ class GioHangState extends State<GioHang> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Phần AppBar màu xanh lá
+          
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
               color: Colors.green,
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
               ),
             ),
             child: SafeArea(
@@ -41,7 +41,7 @@ class GioHangState extends State<GioHang> {
                       IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.white),
                         onPressed: () {
-                          Navigator.pop(context);
+                          
                         },
                       ),
                       const Text(
@@ -54,15 +54,7 @@ class GioHangState extends State<GioHang> {
                       ),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      // Xử lý tiếp tục mua sắm
-                    },
-                    child: const Text(
-                      'Tiếp tục mua sắm',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                
                 ],
               ),
             ),
@@ -92,7 +84,7 @@ class GioHangState extends State<GioHang> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Xử lý xóa sản phẩm
+                  
                   },
                   child: const Text(
                     'Xóa',
@@ -122,7 +114,7 @@ class GioHangState extends State<GioHang> {
                         height: 60,
                         width: 60,
                         child: Image.asset(
-                          'assets/vitaC.png',
+                        'assets/pharmox.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -160,7 +152,7 @@ class GioHangState extends State<GioHang> {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          if (count > 1) count--;
+                          count--;
                         });
                       },
                       icon: const Icon(
@@ -217,10 +209,9 @@ class GioHangState extends State<GioHang> {
             ),
           ),
 
-          // Phần chứa nút "Mua hàng" với Expanded để nó luôn ở dưới cùng
           Expanded(
               child:
-                  Container()), // Dùng Expanded để giữ không gian cho nút mua hàng luôn ở dưới cùng
+                  Container()), 
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -230,13 +221,13 @@ class GioHangState extends State<GioHang> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity,60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: const Text(
-                'Mua hàng',
+                'Thanh toán',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
