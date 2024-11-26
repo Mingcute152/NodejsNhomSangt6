@@ -57,7 +57,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_filled),
-              label: "Trang chủ",
+              label: "Trang chủ", 
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag),

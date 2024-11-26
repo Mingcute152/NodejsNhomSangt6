@@ -34,7 +34,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
           // Header section with user information
           Container(
             color: greenColor,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(

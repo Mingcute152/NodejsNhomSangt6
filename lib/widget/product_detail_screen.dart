@@ -12,6 +12,8 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  int count = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,13 +44,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: IconButton(
                           icon: const Icon(Icons.arrow_back, size: 30),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                // ignore: prefer_const_constructors
-                                builder: (context) => NavBarRoots(),
-                              ),
-                            );
+                            Navigator.pop(context);
                           },
                         ),
                       ),
@@ -133,18 +129,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Row(
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (count == 1) return;
+
+                                    setState(() {
+                                      count--;
+                                    });
+                                  },
                                   icon: Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.green[300],
                                   ),
                                 ),
-                                const Text(
-                                  '1',
-                                  style: TextStyle(fontSize: 18),
+                                Text(
+                                  '$count',
+                                  style: const TextStyle(fontSize: 18),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    setState(() {
+                                      count++;
+                                    });
+                                  },
                                   icon: Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.green[300],

@@ -7,7 +7,10 @@ class ProductController extends GetxController {
   final RxList<ProductModel> listProduct = <ProductModel>[].obs;
 
   Future<void> getDataProduct() async {
+    print(12312312313);
     try {
+      listProduct.clear();
+
       QuerySnapshot querySnapshot =
           await _firestore.collection('products').get();
 
