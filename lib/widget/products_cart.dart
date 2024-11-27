@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/widget/firebase/cart_controller.dart';
 import 'package:flutter_application_3/widget/product_detail_screen.dart';
 import 'package:flutter_application_3/model/product_model.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ProductsCard extends StatelessWidget {
@@ -112,7 +114,12 @@ class ProductsCard extends StatelessWidget {
                         ),
                         const Spacer(),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Get.put(CartController()).addCart(
+                              product: productModel,
+                              quantity: 1,
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.redAccent,

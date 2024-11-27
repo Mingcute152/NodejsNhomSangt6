@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/firebase/cart_controller.dart';
 import 'package:flutter_application_3/widget/navbar_root.dart';
+import 'package:get/get.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductModel product;
@@ -189,7 +191,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.put(CartController()).addCart(
+                  product: widget.product,
+                  quantity: count,
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: greenColor,
                 shape: RoundedRectangleBorder(

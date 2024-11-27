@@ -24,9 +24,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Tài Khoản",
-        ),
+        
         backgroundColor: greenColor,
       ),
       body: ListView(

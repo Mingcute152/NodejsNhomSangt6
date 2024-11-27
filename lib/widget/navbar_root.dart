@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/firebase/cart_controller.dart';
 import 'package:flutter_application_3/widget/firebase/product_controller.dart';
 import 'package:flutter_application_3/widget/gio_hang.dart';
 import 'package:flutter_application_3/widget/trang_chu.dart';
@@ -24,6 +25,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
   ];
 
   final controller = Get.put(ProductController());
+  final cartController = Get.put(CartController());
 
   @override
   void initState() {
@@ -57,7 +59,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_filled),
-              label: "Trang chủ", 
+              label: "Trang chủ",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag),
