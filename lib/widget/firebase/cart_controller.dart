@@ -36,4 +36,9 @@ class CartController extends GetxController {
 
     return formatter.format(totalPrice);
   }
+  void removeProduct(ProductModel product){
+    cartModel.value.listProduct.remove(product
+    );
+    cartModel.refresh();
+  }
 }

@@ -245,6 +245,15 @@ class GioHangState extends State<GioHang> {
                             size: 20,
                           ),
                         ),
+                         IconButton(
+                          onPressed: () {
+                            controller.removeProduct(product);
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
                       ],
                     )
                   ],
@@ -253,6 +262,7 @@ class GioHangState extends State<GioHang> {
             ],
           ),
         ),
+      
         if (!isLast)
           Container(
             color: Colors.grey,
@@ -280,7 +290,14 @@ class GioHangState extends State<GioHang> {
           const SizedBox(height: 8),
           const SizedBox(height: 30),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NavBarRoots()),
+              );
+    
+  },
+            
             style: ElevatedButton.styleFrom(
               backgroundColor: greenColor,
               shape: RoundedRectangleBorder(
