@@ -20,6 +20,8 @@ class GioHangState extends State<GioHang> {
   int count = 1;
   final controller = Get.put(CartController());
 
+  List<String> listCartTempId = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,46 +42,76 @@ class GioHangState extends State<GioHang> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
-              children: [
-                checkBoxCustom,
-                SizedBox(width: 12),
-                Text(
-                  'Chọn tất cả (1)',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  'Tiếp tục mua sắm',
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: Obx(
               () => controller.cartModel.value.listProduct.isEmpty
                   ? cartEmpty
-                  : ListView.builder(
-                      itemCount: controller.cartModel.value.listProduct.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return cartCard(
-                          isLast: index ==
-                              controller.cartModel.value.listProduct.length - 1,
-                          product:
-                              controller.cartModel.value.listProduct[index],
-                        );
-                      },
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          child: Row(
+                            children: [
+                              checkBoxCustom(
+                                isChecked: controller
+                                        .cartModel.value.listProduct.length ==
+                                    listCartTempId.length,
+                                onTap: () {
+                                  setState(() {
+                                    if (controller.cartModel.value.listProduct
+                                            .length ==
+                                        listCartTempId.length) {
+                                      listCartTempId.clear();
+                                    } else {
+                                      listCartTempId.clear();
+                                      listCartTempId.addAll(controller
+                                          .cartModel.value.listProduct
+                                          .map((product) => product.id)
+                                          .toList());
+                                    }
+                                  });
+                                },
+                              ),
+                              SizedBox(width: 12),
+                              Text(
+                                'Chọn tất cả (${listCartTempId.length})',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                'Tiếp tục mua sắm',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount:
+                                controller.cartModel.value.listProduct.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return cartCard(
+                                isLast: index ==
+                                    controller.cartModel.value.listProduct
+                                            .length -
+                                        1,
+                                product: controller
+                                    .cartModel.value.listProduct[index],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
             ),
           ),
@@ -108,7 +140,9 @@ class GioHangState extends State<GioHang> {
                       ),
                     ),
                     Text(
-                      controller.totalPrice.toString(),
+                      controller
+                          .totalPrice(listProductIdChoose: listCartTempId)
+                          .toString(),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -153,7 +187,18 @@ class GioHangState extends State<GioHang> {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             children: [
-              checkBoxCustom,
+              checkBoxCustom(
+                isChecked: listCartTempId.contains(product.id),
+                onTap: () {
+                  setState(() {
+                    if (listCartTempId.contains(product.id)) {
+                      listCartTempId.remove(product.id);
+                    } else {
+                      listCartTempId.add(product.id);
+                    }
+                  });
+                },
+              ),
               SizedBox(width: 12),
               Container(
                 decoration: BoxDecoration(
@@ -245,7 +290,7 @@ class GioHangState extends State<GioHang> {
                             size: 20,
                           ),
                         ),
-                         IconButton(
+                        IconButton(
                           onPressed: () {
                             controller.removeProduct(product);
                           },
@@ -262,7 +307,6 @@ class GioHangState extends State<GioHang> {
             ],
           ),
         ),
-      
         if (!isLast)
           Container(
             color: Colors.grey,
@@ -274,61 +318,73 @@ class GioHangState extends State<GioHang> {
   }
 
   Widget get cartEmpty {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/emptybag.jpg',
-            width: 220,
-            height: 120,
-          ),
-          const Text(
-            'Chưa có sản phẩm nào trong giỏ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 8),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () {
-               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NavBarRoots()),
-              );
-    
-  },
-            
-            style: ElevatedButton.styleFrom(
-              backgroundColor: greenColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/emptybag.jpg',
+              width: 220,
+              height: 120,
+            ),
+            const Text(
+              'Chưa có sản phẩm nào trong giỏ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 8),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NavBarRoots()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: greenColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 12,
+                ),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 12,
+              child: const Text(
+                'Mua sắm ngay',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
-            child: const Text(
-              'Mua sắm ngay',
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget get checkBoxCustom {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.green,
-      ),
-      padding: EdgeInsets.all(3),
-      child: Icon(
-        Icons.check,
-        color: Colors.white,
-        size: 13,
+  Widget checkBoxCustom({
+    required bool isChecked,
+    required Function() onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isChecked ? Colors.green : Colors.transparent,
+          border: Border.all(
+            color: isChecked ? Colors.green : Colors.grey.shade400,
+          ),
+        ),
+        padding: EdgeInsets.all(3),
+        child: Icon(
+          Icons.check,
+          color: isChecked ? Colors.white : Colors.transparent,
+          size: 13,
+        ),
       ),
     );
   }

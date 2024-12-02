@@ -9,7 +9,7 @@ class ProductModel {
   final String title;
   final String description;
   final double price;
-  final int quantity;
+  int quantity;
 
   ProductModel({
     required this.id,
