@@ -292,6 +292,7 @@ class GioHangState extends State<GioHang> {
                         ),
                         IconButton(
                           onPressed: () {
+                            listCartTempId.remove(product.id);
                             controller.removeProduct(product);
                           },
                           icon: Icon(

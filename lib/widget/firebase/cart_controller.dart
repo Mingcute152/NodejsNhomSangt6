@@ -63,6 +63,11 @@ class CartController extends GetxController {
     cartModel.value.listProduct.remove(product);
     cartModel.refresh();
     updateTotalPrice();
+     
+  }
+  void updateSelectedIds(dynamic listCartTempId) {
+    listCartTempId.removeWhere((id) =>
+        !cartModel.value.listProduct.any((product) => product.id == id));
   }
 
   void updateTotalPrice() {
@@ -71,4 +76,7 @@ class CartController extends GetxController {
             cartModel.value.listProduct.map((e) => e.id).toList());
     print("tổng giá trị sau khi xóa : $total");
   }
+
+
+
 }
