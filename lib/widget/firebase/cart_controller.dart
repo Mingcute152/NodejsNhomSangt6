@@ -17,6 +17,10 @@ class CartController extends GetxController {
     listProduct: [],
   ).obs;
 
+  final RxList<String> listTemp = <String>[].obs;
+
+  RxDouble totalPrice = 0.0.obs;
+
   Future<void> addCart({
     required ProductModel product,
     required int quantity,
@@ -42,12 +46,12 @@ class CartController extends GetxController {
     );
   }
 
-  String totalPrice({required List<String> listProductIdChoose}) {
-    double totalPrice = 0;
+  String get getTotalPriceString {
+    totalPrice.value = 0.0;
+
     for (final ProductModel product in cartModel.value.listProduct) {
-      totalPrice += listProductIdChoose.contains(product.id)
-          ? product.price * product.quantity
-          : 0;
+      totalPrice.value +=
+          listTemp.contains(product.id) ? product.price * product.quantity : 0;
     }
 
     final formatter = NumberFormat.currency(
@@ -56,27 +60,62 @@ class CartController extends GetxController {
       decimalDigits: 0,
     );
 
-    return formatter.format(totalPrice);
+    return formatter.format(totalPrice.value);
   }
 
   void removeProduct(ProductModel product) {
     cartModel.value.listProduct.remove(product);
     cartModel.refresh();
     updateTotalPrice();
-     
   }
-  void updateSelectedIds(dynamic listCartTempId) {
-    listCartTempId.removeWhere((id) =>
+
+  void updateSelectedIds(dynamic listTemp) {
+    listTemp.removeWhere((id) =>
         !cartModel.value.listProduct.any((product) => product.id == id));
   }
 
   void updateTotalPrice() {
-    final total = totalPrice(
-        listProductIdChoose:
-            cartModel.value.listProduct.map((e) => e.id).toList());
-    print("tổng giá trị sau khi xóa : $total");
+    totalPrice.value = cartModel.value.listProduct.fold<double>(
+      0.0,
+      (sum, product) => sum + product.price * product.quantity,
+    );
   }
 
+  void onCheckProductCart({required String productId}) {
+    if (listTemp.contains(productId)) {
+      listTemp.remove(productId);
+    } else {
+      listTemp.add(productId);
+    }
 
+    listTemp.refresh();
+  }
 
+  void onCheckAllProductCart() {
+    if (cartModel.value.listProduct.length == listTemp.length) {
+      listTemp.clear();
+    } else {
+      listTemp.clear();
+      listTemp.addAll(
+          cartModel.value.listProduct.map((product) => product.id).toList());
+    }
+  }
+
+  void updateQuantiyProduct({bool isPlus = false, required String productId}) {
+    final int indexOfCartProduct = cartModel.value.listProduct
+        .indexWhere((product) => product.id == productId);
+
+    if (indexOfCartProduct != -1) {
+      if (isPlus) {
+        cartModel.value.listProduct[indexOfCartProduct].quantity++;
+      } else {
+        cartModel.value.listProduct[indexOfCartProduct].quantity--;
+        if (cartModel.value.listProduct[indexOfCartProduct].quantity == 0) {
+          removeProduct(cartModel.value.listProduct[indexOfCartProduct]);
+        }
+      }
+    }
+
+    cartModel.refresh();
+  }
 }

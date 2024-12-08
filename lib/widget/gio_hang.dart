@@ -20,8 +20,6 @@ class GioHangState extends State<GioHang> {
   int count = 1;
   final controller = Get.put(CartController());
 
-  List<String> listCartTempId = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +27,7 @@ class GioHangState extends State<GioHang> {
         backgroundColor: Colors.green,
         centerTitle: true,
         toolbarHeight: 70,
+        leading: const SizedBox(),
         title: Text(
           'Giỏ hàng',
           style: TextStyle(
@@ -39,12 +38,12 @@ class GioHangState extends State<GioHang> {
         ),
       ),
       backgroundColor: Colors.grey.shade200,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Obx(
-              () => controller.cartModel.value.listProduct.isEmpty
+      body: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: controller.cartModel.value.listProduct.isEmpty
                   ? cartEmpty
                   : Column(
                       children: [
@@ -56,26 +55,14 @@ class GioHangState extends State<GioHang> {
                               checkBoxCustom(
                                 isChecked: controller
                                         .cartModel.value.listProduct.length ==
-                                    listCartTempId.length,
+                                    controller.listTemp.length,
                                 onTap: () {
-                                  setState(() {
-                                    if (controller.cartModel.value.listProduct
-                                            .length ==
-                                        listCartTempId.length) {
-                                      listCartTempId.clear();
-                                    } else {
-                                      listCartTempId.clear();
-                                      listCartTempId.addAll(controller
-                                          .cartModel.value.listProduct
-                                          .map((product) => product.id)
-                                          .toList());
-                                    }
-                                  });
+                                  controller.onCheckAllProductCart();
                                 },
                               ),
                               SizedBox(width: 12),
                               Text(
-                                'Chọn tất cả (${listCartTempId.length})',
+                                'Chọn tất cả (${controller.listTemp.length})',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
@@ -114,66 +101,64 @@ class GioHangState extends State<GioHang> {
                       ],
                     ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 16,
+              ),
+              child: Column(
+                children: [
+                  // Phần tổng giá
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Thành tiền',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        controller.getTotalPriceString,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    child: const Text(
+                      'Thanh toán',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            padding: EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 16,
-            ),
-            child: Column(
-              children: [
-                // Phần tổng giá
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Thành tiền',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      controller
-                          .totalPrice(listProductIdChoose: listCartTempId)
-                          .toString(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                  child: const Text(
-                    'Thanh toán',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -188,15 +173,9 @@ class GioHangState extends State<GioHang> {
           child: Row(
             children: [
               checkBoxCustom(
-                isChecked: listCartTempId.contains(product.id),
+                isChecked: controller.listTemp.contains(product.id),
                 onTap: () {
-                  setState(() {
-                    if (listCartTempId.contains(product.id)) {
-                      listCartTempId.remove(product.id);
-                    } else {
-                      listCartTempId.add(product.id);
-                    }
-                  });
+                  controller.onCheckProductCart(productId: product.id);
                 },
               ),
               SizedBox(width: 12),
@@ -239,19 +218,26 @@ class GioHangState extends State<GioHang> {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10),
+                        GestureDetector(
+                          onTap: () {
+                            controller.updateQuantiyProduct(
+                              productId: product.id,
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.horizontal(
+                                left: Radius.circular(10),
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.all(2),
-                          child: Icon(
-                            Icons.remove,
-                            color: Colors.black87,
-                            size: 20,
+                            padding: EdgeInsets.all(2),
+                            child: Icon(
+                              Icons.remove,
+                              color: Colors.black87,
+                              size: 20,
+                            ),
                           ),
                         ),
                         Container(
@@ -275,24 +261,32 @@ class GioHangState extends State<GioHang> {
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.horizontal(
-                              right: Radius.circular(10),
+                        GestureDetector(
+                          onTap: () {
+                            controller.updateQuantiyProduct(
+                              isPlus: true,
+                              productId: product.id,
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.horizontal(
+                                right: Radius.circular(10),
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.all(2),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.black87,
-                            size: 20,
+                            padding: EdgeInsets.all(2),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.black87,
+                              size: 20,
+                            ),
                           ),
                         ),
                         IconButton(
                           onPressed: () {
-                            listCartTempId.remove(product.id);
+                            controller.listTemp.remove(product.id);
                             controller.removeProduct(product);
                           },
                           icon: Icon(
