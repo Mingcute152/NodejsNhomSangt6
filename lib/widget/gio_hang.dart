@@ -9,6 +9,7 @@ import 'package:flutter_application_3/widget/categories.dart';
 import 'package:flutter_application_3/widget/thanh_toan_van_chuyen/thanh_toan.dart';
 import 'package:flutter_application_3/widget/trang_chu.dart';
 import 'package:flutter_application_3/widget/product_detail_screen.dart';
+import 'package:flutter_application_3/widget/xac_nhan_don_hang_screen.dart';
 import 'package:get/get.dart';
 
 class GioHang extends StatefulWidget {
@@ -137,7 +138,15 @@ class GioHangState extends State<GioHang> {
                   ),
                   SizedBox(height: 15),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                Navigator.pushReplacement(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => OrderConfirmation(),
+                  ),
+                );
+              },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       minimumSize: const Size(double.infinity, 50),
@@ -146,7 +155,7 @@ class GioHangState extends State<GioHang> {
                       ),
                     ),
                     child: const Text(
-                      'Thanh toán',
+                      'Mua hàng',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
