@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/model/status_order.dart';
 import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/widget/dang_nhap.dart'; // Đảm bảo bạn có widget đăng nhập này
+import 'package:flutter_application_3/widget/dang_nhap.dart';
+import 'package:flutter_application_3/widget/order_status_screen.dart';
 
 class TaiKhoan extends StatefulWidget {
   const TaiKhoan({super.key});
@@ -24,7 +26,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         backgroundColor: greenColor,
       ),
       body: ListView(
@@ -108,62 +109,78 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildOrderStatusButton(
-                        Icons.local_shipping,
-                        "Đang xử lý",
-                      ),
-                      _buildOrderStatusButton(
-                        Icons.directions_bike,
-                        "Đang giao",
-                      ),
-                      _buildOrderStatusButton(
-                        Icons.check_circle,
-                        "Đã giao",
-                      ),
-                      _buildOrderStatusButton(
-                        Icons.refresh,
-                        "Đổi/Trả",
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.dathanhtoan.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                          label: const Text('Đang xử lý'),
+                        ),
+                        SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.danggiaohang.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.edit),
+                          label: const Text('Đang giao'),
+                        ),
+                        SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.dagiao.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.delete),
+                          label: const Text('Đã giao'),
+                        ),
+                        SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.doitra.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.search),
+                          label: const Text('Đổi/Trả'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Account Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Tài khoản",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildAccountOption(
-                          Icons.medical_services, "Đơn thuốc của tôi"),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Logout Button
           Padding(
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
@@ -199,39 +216,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
   }
 
   // Helper method to build order status buttons
-  Widget _buildOrderStatusButton(IconData icon, String label) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          color: greenColor,
-          size: 30,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ],
-    );
-  }
 
   // Helper method to build account option rows
-  Widget _buildAccountOption(IconData icon, String label) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: greenColor,
-      ),
-      title: Text(label),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: Colors.grey,
-      ),
-      onTap: () {
-        // Handle tap on each account option
-      },
-    );
-  }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/widget/firebase/cart_controller.dart';
+import 'package:get/get.dart';
 
 class OrderConfirmation extends StatelessWidget {
   const OrderConfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CartController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Xác nhận đơn hàng"),
@@ -172,7 +175,9 @@ class OrderConfirmation extends StatelessWidget {
             color: Colors.white,
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.payment();
+              },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
               ),

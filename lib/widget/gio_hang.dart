@@ -22,6 +22,12 @@ class GioHangState extends State<GioHang> {
   final controller = Get.put(CartController());
 
   @override
+  void initState() {
+    super.initState();
+    controller.getCart();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -139,14 +145,14 @@ class GioHangState extends State<GioHang> {
                   SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () {
-                Navigator.pushReplacement(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => OrderConfirmation(),
-                  ),
-                );
-              },
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => OrderConfirmation(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       minimumSize: const Size(double.infinity, 50),
