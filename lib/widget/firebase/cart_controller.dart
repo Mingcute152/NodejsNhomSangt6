@@ -196,7 +196,7 @@ class CartController extends GetxController {
       'phone': '0906680225',
       'products': cartModel.value.listProduct.map((e) => e.toMap()),
       'userId': cartModel.value.userId,
-      'status': StatusOrder.dathanhtoan.typeOrder,
+      'status': StatusOrder.danggiaohang.typeOrder,
       'id': cartModel.value.id,
       'createdAt': DateTime.now(),
       'totalPrice': totalPrice.value,

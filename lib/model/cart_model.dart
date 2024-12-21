@@ -53,14 +53,15 @@ class CartModel {
   }
 
   factory CartModel.fromMap(Map<String, dynamic> map) {
-    Timestamp timestamp = map['createdAt'];
+    // print('123123123123123123');
+    Timestamp timestamp = map['createdAt'] ?? Timestamp.now();
     return CartModel(
-      id: map['id'] as String,
-      userId: map['userId'] as String,
-      // listProduct: (map['products'] ?? []).map(
-      //   (x) => ProductModel.fromMap(x),
-      // ),
-      listProduct: [],
+      id: map['id'] ?? '',
+      userId: map['userId'] ?? '',
+      listProduct: (map['products'] as List<dynamic>? ?? [])
+          .map((x) => ProductModel.fromMap(x as Map<String, dynamic>))
+          .toList(),
+      // listProduct: [],
       status: int.tryParse(map['status']?.toString() ?? '1') ?? 1,
       createDate: timestamp.toDate(),
       totalPrice: double.tryParse(map['totalPrice']?.toString() ?? '0') ?? 0.0,

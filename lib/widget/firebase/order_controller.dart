@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_3/model/cart_model.dart';
 import 'package:get/get.dart';
 
@@ -21,8 +22,11 @@ class OrderController extends GetxController {
       listOrder.addAll(querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .map((map) => CartModel.fromMap(map))
-          .where((cart) => cart.status == type)
-          .toList());
+          .where((cart) {
+        print(cart.userId == FirebaseAuth.instance.currentUser?.uid);
+        return cart.status == type &&
+            cart.userId == FirebaseAuth.instance.currentUser?.uid;
+      }).toList());
 
       print('listOrder ${listOrder.length}');
     } catch (e) {

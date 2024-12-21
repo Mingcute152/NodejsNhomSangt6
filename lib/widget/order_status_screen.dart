@@ -15,25 +15,6 @@ class OrderListScreen extends StatefulWidget {
 
 class _OrderListScreenState extends State<OrderListScreen> {
   final controller = Get.put(OrderController());
-  final List<Order> orders = [
-    Order(
-      date: DateTime(2024, 12, 9),
-      deliveryMethod: 'Giao hàng tận nơi',
-      orderId: '#0505267',
-      products: ['Viên uống Dr. Caci Ocavill...', '+1 sản phẩm khác'],
-      totalAmount: 681400,
-      status: OrderStatus.cancelled,
-    ),
-    Order(
-      date: DateTime(2024, 8, 23),
-      deliveryMethod: 'Nhận tại cửa hàng',
-      orderId: '#2228605',
-      products: ['NEXTG CAL MBC 5X12'],
-      totalAmount: 111400,
-      status: OrderStatus.delivered,
-    ),
-    // Thêm các đơn hàng khác nếu cần
-  ];
 
   @override
   void initState() {
@@ -64,21 +45,29 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ),
               ),
               // Tab trạng thái đơn hàng (có thể sử dụng TabBar nếu nhiều tab hơn)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _buildStatusTab('Tất cả', true),
-                      _buildStatusTab('Đang xử lý', false),
-                      _buildStatusTab('Đang giao', false),
-                      _buildStatusTab('Đã giao', false),
-                      _buildStatusTab('Đã hủy', false),
-                    ],
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              //   child: SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       children: [
+              //         _buildStatusTab('Tất cả', true),
+              //         _buildStatusTab(
+              //           'Đang giao hàng',
+              //           widget.type == StatusOrder.danggiaohang.typeOrder,
+              //         ),
+              //         _buildStatusTab(
+              //           'Đã giao',
+              //           widget.type == StatusOrder.dagiao.typeOrder,
+              //         ),
+              //         _buildStatusTab(
+              //           'Đổi trả',
+              //           widget.type == StatusOrder.doitra.typeOrder,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Expanded(
                 child: ListView.builder(
                   itemCount: controller.listOrder.length,
@@ -97,26 +86,17 @@ class _OrderListScreenState extends State<OrderListScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Giao hàng tận nơi • ${order.id}'),
-                            // ...order.products.map((product) => Text(product)),
+                            ...order.listProduct
+                                .map((product) => Text(product.title)),
                           ],
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              order.status == StatusOrder.danggiaohang.typeOrder
-                                  ? 'Đang giao hàng'
-                                  : order.status == StatusOrder.doitra.typeOrder
-                                      ? 'Đã hủy'
-                                      : order.status ==
-                                              StatusOrder.dagiao.typeOrder
-                                          ? 'Đã giao'
-                                          : '',
+                              order.status.statusOrder.name,
                               style: TextStyle(
-                                color:
-                                    order.status == StatusOrder.doitra.typeOrder
-                                        ? Colors.red
-                                        : Colors.green,
+                                color: order.status.statusOrder.getColor,
                               ),
                             ),
                             Text(NumberFormat.currency(
@@ -147,24 +127,4 @@ class _OrderListScreenState extends State<OrderListScreen> {
       ),
     );
   }
-}
-
-enum OrderStatus { pending, processing, delivering, delivered, cancelled }
-
-class Order {
-  final DateTime date;
-  final String deliveryMethod;
-  final String orderId;
-  final List<String> products;
-  final int totalAmount;
-  final OrderStatus status;
-
-  Order({
-    required this.date,
-    required this.deliveryMethod,
-    required this.orderId,
-    required this.products,
-    required this.totalAmount,
-    required this.status,
-  });
 }

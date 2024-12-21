@@ -61,12 +61,14 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      id: map['id'] ?? '',
-      image: map['image'] ?? '',
-      title: map['title'] ?? '',
+      id: map['id']?.toString() ?? '',
+      image: map['image']?.toString() ?? '',
+      title: map['title']?.toString() ?? '',
       description: map['description'] ?? '',
       price: double.tryParse(map['price']?.toString() ?? '') ?? 0.0,
       quantity: int.tryParse(map['quantity']?.toString() ?? '1') ?? 1,
+      // price: 0,
+      // quantity: 0,
     );
   }
 

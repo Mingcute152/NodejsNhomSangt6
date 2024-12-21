@@ -109,6 +109,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8),
                   ),
+                  height: 70,
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
@@ -120,15 +121,18 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OrderListScreen(
-                                  type: StatusOrder.dathanhtoan.typeOrder,
+                                  type: StatusOrder.chuathanhtoan.typeOrder,
                                 ),
                               ),
                             );
                           },
-                          icon: const Icon(Icons.add),
-                          label: const Text('Đang xử lý'),
+                          icon: const Icon(
+                            Icons.check_box_outline_blank,
+                            color: Colors.green,
+                          ),
+                          label: const Text('Chưa thanh toán'),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
@@ -140,10 +144,11 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.edit),
+                          icon: const Icon(Icons.local_shipping,
+                              color: Colors.green),
                           label: const Text('Đang giao'),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
@@ -155,10 +160,11 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.delete),
+                          icon:
+                              const Icon(Icons.check_box, color: Colors.green),
                           label: const Text('Đã giao'),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
@@ -170,7 +176,8 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.search),
+                          icon: const Icon(Icons.published_with_changes,
+                              color: Colors.green),
                           label: const Text('Đổi/Trả'),
                         ),
                       ],
