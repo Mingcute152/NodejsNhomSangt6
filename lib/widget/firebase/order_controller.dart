@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_3/model/cart_model.dart';
@@ -23,6 +25,8 @@ class OrderController extends GetxController {
           .map((doc) => doc.data() as Map<String, dynamic>)
           .map((map) => CartModel.fromMap(map))
           .where((cart) {
+        // ignore: duplicate_ignore
+        // ignore: avoid_print
         print(cart.userId == FirebaseAuth.instance.currentUser?.uid);
         return cart.status == type &&
             cart.userId == FirebaseAuth.instance.currentUser?.uid;

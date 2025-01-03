@@ -117,6 +117,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
         ));
   }
 
+  // ignore: unused_element
   Widget _buildStatusTab(String title, bool isSelected) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),

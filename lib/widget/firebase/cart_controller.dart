@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 class CartController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // ignore: unused_field
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Rx<CartModel> cartModel = CartModel(
@@ -144,6 +145,7 @@ class CartController extends GetxController {
   void updateTotalPrice() {
     totalPrice.value = cartModel.value.listProduct.fold<double>(
       0.0,
+      // ignore: avoid_types_as_parameter_names
       (sum, product) => sum + product.price * product.quantity,
     );
   }
