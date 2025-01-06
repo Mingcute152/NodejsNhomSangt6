@@ -3,14 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/widget/categories.dart';
+import 'package:flutter_application_3/widget/firebase/product_controller.dart';
 // ignore: unused_import
 import 'package:flutter_application_3/widget/products_cart.dart';
 // ignore: unused_import
 import 'package:flutter_application_3/widget/products.dart';
+import 'package:get/get.dart';
 
 class TrangChu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ProductController());
     return Scaffold(
       body: ListView(
         children: [
@@ -30,6 +33,7 @@ class TrangChu extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
+                        // ignore: deprecated_member_use
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 2,
                         blurRadius: 10,
@@ -59,6 +63,9 @@ class TrangChu extends StatelessWidget {
                               hintText: "Tìm sản phẩm, TPCN cần tìm... ",
                               border: InputBorder.none,
                             ),
+                            onChanged: (value) {
+                              controller.searchProduct(name: value);
+                            },
                           ),
                         ),
                       ),

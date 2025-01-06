@@ -25,7 +25,10 @@ class Categories extends StatelessWidget {
           horizontal: 10,
         ),
         itemBuilder: (context, index) {
-          return CategoryCard(icon: listIcons[index]);
+          return CategoryCard(
+            icon: listIcons[index],
+            index: index,
+          );
         },
       ),
     );

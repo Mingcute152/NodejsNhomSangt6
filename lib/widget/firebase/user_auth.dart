@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_application_3/widget/dang_nhap.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -69,4 +71,16 @@ class Auth {
 
   // Biến để lưu lại verificationId khi mã OTP được gửi
   String? verificationId;
+
+  Future<void> deleteAccount() async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+
+      await user?.delete();
+
+      // // Điều hướng về màn hình đăng nhập hoặc xử lý tiếp
+      // Navigator.of(context).pushReplacementNamed('/login');
+    } on FirebaseAuthException catch (e) {
+    } catch (e) {}
+  }
 }

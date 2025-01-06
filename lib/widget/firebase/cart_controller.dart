@@ -32,7 +32,8 @@ class CartController extends GetxController {
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList()
           .forEach((map) {
-        if (map['status'] == 0) {
+        if (map['status'] == 0 &&
+            map['userId'] == _firebaseAuth.currentUser?.uid) {
           cartModel.value = CartModel(
             id: map['id'],
             userId: FirebaseAuth.instance.currentUser?.uid ?? '',

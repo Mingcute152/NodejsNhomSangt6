@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/firebase/product_controller.dart';
+import 'package:get/get.dart';
 
 class CategoryCard extends StatelessWidget {
   final String icon;
+  final int index;
   const CategoryCard({
     super.key,
     required this.icon,
+    required this.index,
   });
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ProductController());
+
     return GestureDetector(
       onTap: () {
-        // ignore: avoid_print
-        print(icon);
+        controller.filterProduct(type: index);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),

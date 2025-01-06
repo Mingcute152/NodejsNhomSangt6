@@ -4,6 +4,7 @@ import 'package:flutter_application_3/model/status_order.dart';
 import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/widget/build_Status_Button.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
+import 'package:flutter_application_3/widget/firebase/user_auth.dart';
 import 'package:flutter_application_3/widget/order_status_screen.dart';
 
 class TaiKhoan extends StatefulWidget {
@@ -57,7 +58,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
                           _user?.displayName ?? 'Chưa có tên',
                           style: const TextStyle(
                               fontSize: 20,
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
@@ -184,7 +185,9 @@ class _TaiKhoanState extends State<TaiKhoan> {
               ],
             ),
           ),
-
+          const SizedBox(
+            height: 330,
+          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
@@ -212,6 +215,31 @@ class _TaiKhoanState extends State<TaiKhoan> {
                   color: Colors.white,
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                await Auth().deleteAccount();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => DangNhap(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: grey35Color,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text("Xóa tài khoản",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )),
             ),
           ),
         ],

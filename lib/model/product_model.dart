@@ -10,6 +10,7 @@ class ProductModel {
   final String description;
   final double price;
   int quantity;
+  final int type;
 
   ProductModel({
     required this.id,
@@ -18,6 +19,7 @@ class ProductModel {
     required this.description,
     required this.price,
     this.quantity = 1,
+    required this.type,
   });
 
   String get priceString {
@@ -37,6 +39,7 @@ class ProductModel {
     String? description,
     double? price,
     int? quantity,
+    int? type,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class ProductModel {
       description: description ?? this.description,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      type: type ?? this.type,
     );
   }
 
@@ -56,6 +60,7 @@ class ProductModel {
       'description': description,
       'price': price,
       'quantity': quantity,
+      'type': type,
     };
   }
 
@@ -67,6 +72,7 @@ class ProductModel {
       description: map['description'] ?? '',
       price: double.tryParse(map['price']?.toString() ?? '') ?? 0.0,
       quantity: int.tryParse(map['quantity']?.toString() ?? '1') ?? 1,
+      type: int.tryParse(map['type']?.toString() ?? '0') ?? 0,
       // price: 0,
       // quantity: 0,
     );
@@ -91,7 +97,8 @@ class ProductModel {
         other.title == title &&
         other.description == description &&
         other.price == price &&
-        other.quantity == quantity;
+        other.quantity == quantity &&
+        other.type == type;
   }
 
   @override
@@ -101,6 +108,7 @@ class ProductModel {
         title.hashCode ^
         description.hashCode ^
         price.hashCode ^
-        quantity.hashCode;
+        quantity.hashCode ^
+        type.hashCode;
   }
 }
