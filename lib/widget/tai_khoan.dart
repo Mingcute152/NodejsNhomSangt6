@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/model/status_order.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/build_Status_Button.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
 import 'package:flutter_application_3/widget/order_status_screen.dart';
 
@@ -27,6 +28,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: greenColor,
+        toolbarHeight: 10,
       ),
       body: ListView(
         children: [
@@ -55,7 +57,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
                           _user?.displayName ?? 'Chưa có tên',
                           style: const TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
@@ -94,29 +96,26 @@ class _TaiKhoanState extends State<TaiKhoan> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      "Xem tất cả",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  height: 70,
+                  height: 80,
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
+                        // Nút: Chưa thanh toán
+                        buildStatusButton(
+                          icon: Icons.check_box_outline_blank,
+                          label: 'Chưa thanh toán',
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -126,15 +125,14 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(
-                            Icons.check_box_outline_blank,
-                            color: Colors.green,
-                          ),
-                          label: const Text('Chưa thanh toán'),
                         ),
-                        const SizedBox(width: 15),
-                        ElevatedButton.icon(
-                          onPressed: () {
+                        const SizedBox(width: 20),
+
+                        // Nút: Đang giao
+                        buildStatusButton(
+                          icon: Icons.local_shipping,
+                          label: 'Đang giao',
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -144,13 +142,14 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.local_shipping,
-                              color: Colors.green),
-                          label: const Text('Đang giao'),
                         ),
-                        const SizedBox(width: 15),
-                        ElevatedButton.icon(
-                          onPressed: () {
+                        const SizedBox(width: 20),
+
+                        // Nút: Đã giao
+                        buildStatusButton(
+                          icon: Icons.check_box,
+                          label: 'Đã giao',
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -160,13 +159,14 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon:
-                              const Icon(Icons.check_box, color: Colors.green),
-                          label: const Text('Đã giao'),
                         ),
-                        const SizedBox(width: 15),
-                        ElevatedButton.icon(
-                          onPressed: () {
+                        const SizedBox(width: 20),
+
+                        // Nút: Đổi/Trả
+                        buildStatusButton(
+                          icon: Icons.published_with_changes,
+                          label: 'Đổi/Trả',
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -176,13 +176,10 @@ class _TaiKhoanState extends State<TaiKhoan> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.published_with_changes,
-                              color: Colors.green),
-                          label: const Text('Đổi/Trả'),
                         ),
                       ],
                     ),
-                  ),  
+                  ),
                 ),
               ],
             ),
@@ -221,8 +218,4 @@ class _TaiKhoanState extends State<TaiKhoan> {
       ),
     );
   }
-
-  // Helper method to build order status buttons
-
-  // Helper method to build account option rows
 }

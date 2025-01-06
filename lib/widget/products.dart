@@ -16,6 +16,11 @@ class Products extends StatefulWidget {
 
 class _ProductsState extends State<Products> {
   final controller = Get.put(ProductController());
+  // ignore: unused_field
+  final TextEditingController _searchController = TextEditingController();
+  // ignore: unused_field, prefer_final_fields
+  List<Map<String, dynamic>> _searchResults = [];
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

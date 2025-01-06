@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/theme.dart';
+import 'package:flutter_application_3/widget/dang_nhap.dart';
 import 'package:flutter_application_3/widget/firebase/user_auth.dart';
 
 class ManHinhDangKy extends StatefulWidget {
@@ -75,14 +76,11 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(
-                  50,
+                  60,
                 ),
                 child: Image.asset(
                   "assets/login2.png",
                 ),
-              ),
-              const SizedBox(
-                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.all(
@@ -111,7 +109,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     label: const Text(
-                      "Nhập mật khẩu",
+                      "Nhập mật khẩu 6-12 chữ",
                     ),
                     prefixIcon: const Icon(
                       Icons.lock,
@@ -179,6 +177,40 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                     ),
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Bạn đã có tài khoản?",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: greyBoldColor,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Chuyển đến màn hình đăng ký
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DangNhap(),
+                          ));
+                    },
+                    child: Text(
+                      "Đăng nhập",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: greenColor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

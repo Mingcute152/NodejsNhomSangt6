@@ -7,6 +7,7 @@ import 'package:flutter_application_3/widget/dang_ky.dart';
 import 'package:flutter_application_3/widget/firebase/user_auth.dart';
 import 'package:flutter_application_3/widget/navbar_root.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_3/widget/quenmatkhau.dart';
 
 class DangNhap extends StatefulWidget {
   @override
@@ -130,8 +131,8 @@ class _DangNhapState extends State<DangNhap> {
                             ? null // Vô hiệu hoá nút nếu đang loading
                             : signInWithEmailAndPassword,
                         child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 40),
                           child: Center(
                             child: _isLoading
                                 ? CircularProgressIndicator(
@@ -182,6 +183,19 @@ class _DangNhapState extends State<DangNhap> {
                       ),
                     ),
                   ],
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuenMatKhauScreen()),
+                    );
+                  },
+                  child: Text(
+                    "Quên mật khẩu?",
+                    style: TextStyle(color: greenColor, fontSize: 16),
+                  ),
                 ),
               ],
             ),
