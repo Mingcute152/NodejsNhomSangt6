@@ -76,6 +76,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8),
                   ),
+<<<<<<< refs/remotes/origin/main
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -84,13 +85,117 @@ class _TaiKhoanState extends State<TaiKhoan> {
                       _buildOrderStatusButton(Icons.check_circle, "Đã giao"),
                       _buildOrderStatusButton(Icons.refresh, "Đổi/Trả"),
                     ],
+=======
+                  height: 70,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.chuathanhtoan.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.check_box_outline_blank,
+                            color: Colors.green,
+                          ),
+                          label: const Text('Chưa thanh toán'),
+                        ),
+                        const SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.danggiaohang.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.local_shipping,
+                              color: Colors.green),
+                          label: const Text('Đang giao'),
+                        ),
+                        const SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.dagiao.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon:
+                              const Icon(Icons.check_box, color: Colors.green),
+                          label: const Text('Đã giao'),
+                        ),
+                        const SizedBox(width: 15),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderListScreen(
+                                  type: StatusOrder.doitra.typeOrder,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.published_with_changes,
+                              color: Colors.green),
+                          label: const Text('Đổi/Trả'),
+                        ),
+                      ],
+                    ),
+>>>>>>> local
                   ),
                 ),
               ],
             ),
           ),
 
+<<<<<<< refs/remotes/origin/main
           // Account Section
+=======
+          // Favorite Products Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: () {
+                // Thêm logic mở danh sách sản phẩm yêu thích tại đây
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                "Sản phẩm yêu thích",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+
+          // Logout Button
+>>>>>>> local
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -150,6 +255,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
       ),
     );
   }
+<<<<<<< refs/remotes/origin/main
 
   // Helper method to build order status buttons
   Widget _buildOrderStatusButton(IconData icon, String label) {
@@ -174,3 +280,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
     );
   }
 }
+=======
+}
+>>>>>>> local
