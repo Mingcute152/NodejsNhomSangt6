@@ -223,6 +223,7 @@ class _TaiKhoanState extends State<TaiKhoan> {
               onPressed: () async {
                 await Auth().deleteAccount();
                 Navigator.pushReplacement(
+                  // ignore: use_build_context_synchronously
                   context,
                   MaterialPageRoute(
                     builder: (_) => DangNhap(),

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
@@ -80,7 +82,6 @@ class Auth {
 
       // // Điều hướng về màn hình đăng nhập hoặc xử lý tiếp
       // Navigator.of(context).pushReplacementNamed('/login');
-    } on FirebaseAuthException catch (e) {
-    } catch (e) {}
+    } on FirebaseAuthException {}
   }
 }
