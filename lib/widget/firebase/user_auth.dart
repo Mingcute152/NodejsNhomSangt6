@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/widget/dang_nhap.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -84,5 +85,37 @@ class Auth {
       // Navigator.of(context).pushReplacementNamed('/login');
       // ignore: empty_catches
     } on FirebaseAuthException {}
+  }
+
+  // Kiểm tra xem người dùng có phải là admin không
+  Future<bool> isAdmin() async {
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      // Giả sử bạn lưu thông tin admin trong custom claims hoặc Firestore
+      // Thay thế đoạn này bằng logic kiểm tra admin thực tế
+      final idTokenResult = await user.getIdTokenResult();
+      return idTokenResult.claims?['admin'] == true;
+    }
+    return false;
+  }
+
+  // Thêm sản phẩm (chỉ dành cho admin)
+  Future<void> addProduct({
+    required String productName,
+    required double price,
+    required String description,
+  }) async {
+    if (await isAdmin()) {
+      // Giả sử bạn lưu sản phẩm trong Firestore
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('products').add({
+        'name': productName,
+        'price': price,
+        'description': description,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } else {
+      throw "Bạn không có quyền thêm sản phẩm.";
+    }
   }
 }
