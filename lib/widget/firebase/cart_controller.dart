@@ -132,10 +132,34 @@ class CartController extends GetxController {
     return formatter.format(totalPrice.value);
   }
 
-  void removeProduct(ProductModel product) {
+  void removeProduct(ProductModel product) async {
+    // Xóa sản phẩm khỏi danh sách trong cartModel
     cartModel.value.listProduct.remove(product);
     cartModel.refresh();
+
+    // Cập nhật lại dữ liệu trên Firestore
+    if (cartModel.value.id.isNotEmpty) {
+      DocumentReference docRef =
+          _firestore.collection('carts').doc(cartModel.value.id);
+
+      await docRef.update({
+        'products': cartModel.value.listProduct.map((e) => e.toMap()).toList(),
+      });
+    }
+
+    // Cập nhật lại tổng giá
     updateTotalPrice();
+
+    // Hiển thị thông báo
+    await Fluttertoast.showToast(
+      msg: "Xóa sản phẩm thành công!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey.shade300,
+      textColor: Colors.black,
+      fontSize: 16.0,
+    );
   }
 
   void updateSelectedIds(dynamic listTemp) {
