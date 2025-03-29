@@ -82,6 +82,7 @@ class Auth {
 
       // // Điều hướng về màn hình đăng nhập hoặc xử lý tiếp
       // Navigator.of(context).pushReplacementNamed('/login');
+      // ignore: empty_catches
     } on FirebaseAuthException {}
   }
 }

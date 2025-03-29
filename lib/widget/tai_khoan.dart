@@ -29,90 +29,90 @@ class _TaiKhoanState extends State<TaiKhoan> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: greenColor,
-        toolbarHeight: 10,
+        title: const Text(
+          "Tài khoản của tôi",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
-      body: ListView(
-        children: [
-          // Header section with user information
-          Container(
-            color: greenColor,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: whiteColor,
-                      child: Icon(
-                        Icons.person,
-                        size: 40,
-                        color: greenColor,
-                      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header section with user information
+            Container(
+              color: greenColor,
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: whiteColor,
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                      color: greenColor,
                     ),
-                    const SizedBox(width: 16),
-                    Column(
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           _user?.displayName ?? 'Chưa có tên',
                           style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 22,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
+                        const SizedBox(height: 4),
                         Text(
                           _user?.phoneNumber ??
                               _user?.email ??
                               'Chưa có thông tin',
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.white70,
                           ),
                         ),
                       ],
                     ),
-                    const Spacer(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Order Status Section
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 16,
-            ),
-            child: Column(
-              children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Đơn của tôi",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
                   ),
-                  height: 80,
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
+                ],
+              ),
+            ),
+
+            // Order Status Section
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Đơn của tôi",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Nút: Chưa thanh toán
                         buildStatusButton(
                           icon: Icons.check_box_outline_blank,
                           label: 'Chưa thanh toán',
@@ -127,9 +127,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
                             );
                           },
                         ),
-                        const SizedBox(width: 20),
-
-                        // Nút: Đang giao
                         buildStatusButton(
                           icon: Icons.local_shipping,
                           label: 'Đang giao',
@@ -144,9 +141,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
                             );
                           },
                         ),
-                        const SizedBox(width: 20),
-
-                        // Nút: Đã giao
                         buildStatusButton(
                           icon: Icons.check_box,
                           label: 'Đã giao',
@@ -161,9 +155,6 @@ class _TaiKhoanState extends State<TaiKhoan> {
                             );
                           },
                         ),
-                        const SizedBox(width: 20),
-
-                        // Nút: Đổi/Trả
                         buildStatusButton(
                           icon: Icons.published_with_changes,
                           label: 'Đổi/Trả',
@@ -181,69 +172,72 @@ class _TaiKhoanState extends State<TaiKhoan> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 330,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.pushReplacement(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => DangNhap(),
+
+            // Logout and Delete Account Buttons
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _auth.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DangNhap(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Đăng xuất",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                "Đăng xuất",
-                style: TextStyle(
-                  fontSize: 19,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                await Auth().deleteAccount();
-                Navigator.pushReplacement(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => DangNhap(),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await Auth().deleteAccount();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DangNhap(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: grey35Color,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Xóa tài khoản",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: grey35Color,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                ],
               ),
-              child: const Text("Xóa tài khoản",
-                  style: TextStyle(
-                    color: Colors.white,
-                  )),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
