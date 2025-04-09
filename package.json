@@ -1,0 +1,30 @@
+{
+  "name": "doanlaptrinhdidong",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mingcute152/Doanlaptrinhdidong.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mingcute152/Doanlaptrinhdidong/issues"
+  },
+  "homepage": "https://github.com/Mingcute152/Doanlaptrinhdidong#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "firebase-admin": "^13.2.0"
+  }
+}

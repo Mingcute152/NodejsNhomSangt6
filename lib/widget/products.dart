@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/widget/firebase/product_controller.dart';
+import 'package:flutter_application_3/controllers/firebase/product_controller.dart';
 import 'package:flutter_application_3/widget/products_cart.dart';
 import 'package:get/get.dart';
 

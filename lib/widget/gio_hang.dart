@@ -1,12 +1,13 @@
 // ignore_for_file: unused_import, use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/controllers/firebase/cart_controller.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/widget/firebase/cart_controller.dart';
+
 import 'package:flutter_application_3/widget/navbar_root.dart';
 import 'package:flutter_application_3/widget/categories.dart';
-import 'package:flutter_application_3/widget/thanh_toan_van_chuyen/thanh_toan.dart';
+
 import 'package:flutter_application_3/widget/trang_chu.dart';
 import 'package:flutter_application_3/widget/product_detail_screen.dart';
 import 'package:flutter_application_3/widget/xac_nhan_don_hang_screen.dart';
@@ -64,7 +65,7 @@ class GioHangState extends State<GioHang> {
                                         .cartModel.value.listProduct.length ==
                                     controller.listTemp.length,
                                 onTap: () {
-                                  controller.onCheckAllProductCart();
+                                  controller.onCheckProductCart(productId: '');
                                 },
                               ),
                               SizedBox(width: 12),
@@ -149,7 +150,9 @@ class GioHangState extends State<GioHang> {
                         // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
-                          builder: (_) => OrderConfirmation(),
+                          builder: (_) => OrderConfirmation(
+                            selectedProducts: const [],
+                          ),
                         ),
                       );
                     },
