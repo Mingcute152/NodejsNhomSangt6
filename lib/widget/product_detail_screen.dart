@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/controllers/firebase/cart_controller.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/controllers/firebase/cart_controller.dart';
+import 'package:flutter_application_3/widget/rating_widget.dart';
 
 import 'package:get/get.dart';
 
@@ -15,6 +16,13 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int count = 1;
+  double averageRating = 0;
+
+  void updateAverageRating(double rating) {
+    setState(() {
+      averageRating = rating;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +59,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ),
                       Center(
-                        child: Image.asset(
-                          widget.product.image,
-                          height: 250,
-                          fit: BoxFit.contain,
-                        ),
+                        child: widget.product
+                            .getImageWidget(height: 250, fit: BoxFit.contain),
                       ),
                     ],
                   ),
@@ -77,41 +82,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Row(
+                        Row(
                           children: [
-                            Icon(
-                              Icons.star,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            Icon(
-                              Icons.star_border_sharp,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            SizedBox(width: 5),
+                            // Hiển thị sao đánh giá
+                            ...List.generate(5, (index) {
+                              return Icon(
+                                index < averageRating.floor()
+                                    ? Icons.star
+                                    : (index < averageRating.ceil() &&
+                                            index > averageRating.floor())
+                                        ? Icons.star_half
+                                        : Icons.star_border,
+                                color: Colors.amber,
+                                size: 20,
+                              );
+                            }),
+                            const SizedBox(width: 5),
                             Text(
-                              '4.0',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              averageRating.toStringAsFixed(1),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(width: 5),
-                            Text('(0 reviews)',
-                                style: TextStyle(color: Colors.grey)),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -179,6 +170,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             fontSize: 14,
                             color: Colors.grey,
                           ),
+                        ),
+
+                        // Đánh giá sản phẩm
+                        RatingWidget(
+                          productId: widget.product.id,
+                          onRatingChanged: updateAverageRating,
                         ),
                       ],
                     ),

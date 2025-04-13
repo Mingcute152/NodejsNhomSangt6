@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/model/cart_model.dart';
-import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/services/cart_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import 'package:flutter_application_3/model/cart_model.dart';
+import 'package:flutter_application_3/model/product_model.dart';
+
 class CartController extends GetxController {
   final CartService _cartService = CartService();
+  final RxBool isLoading = false.obs;
 
   Rx<CartModel> cartModel = CartModel(
     id: '',
@@ -20,9 +22,14 @@ class CartController extends GetxController {
   RxDouble totalPrice = 0.0.obs;
 
   Future<void> getCart() async {
-    final fetchedCart = await _cartService.fetchCart();
-    if (fetchedCart != null) {
-      cartModel.value = fetchedCart;
+    try {
+      isLoading.value = true;
+      final fetchedCart = await _cartService.fetchCart();
+      if (fetchedCart != null) {
+        cartModel.value = fetchedCart;
+      }
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -30,51 +37,75 @@ class CartController extends GetxController {
     required ProductModel product,
     required int quantity,
   }) async {
-    final int indexOfList = cartModel.value.listProduct
-        .indexWhere((productModel) => productModel.id == product.id);
+    try {
+      final int indexOfList = cartModel.value.listProduct
+          .indexWhere((productModel) => productModel.id == product.id);
 
-    if (indexOfList != -1) {
-      cartModel.value.listProduct[indexOfList].quantity += quantity;
-    } else {
-      cartModel.value.listProduct.add(product.copyWith(quantity: quantity));
+      if (indexOfList != -1) {
+        // Cập nhật số lượng nếu sản phẩm đã tồn tại
+        cartModel.value.listProduct[indexOfList].quantity += quantity;
+      } else {
+        // Thêm sản phẩm mới vào giỏ hàng
+        cartModel.value.listProduct.add(product.copyWith(quantity: quantity));
+      }
+
+      // Cập nhật tổng tiền
+      updateTotalPrice();
+
+      // Lưu vào database
+      if (cartModel.value.id.isEmpty) {
+        cartModel.value.id = await _cartService.createCart(cartModel.value);
+      } else {
+        await _cartService.updateCart(cartModel.value);
+      }
+
+      cartModel.refresh();
+
+      Get.snackbar(
+        'Thành công',
+        'Đã thêm sản phẩm vào giỏ hàng',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Lỗi',
+        'Không thể thêm vào giỏ hàng: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
+  }
 
-    await Fluttertoast.showToast(
-      msg: "Thêm vào giỏ hàng thành công!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey.shade300,
-      textColor: Colors.black,
-      fontSize: 16.0,
-    );
+  String calculateTotalPrice() {
+    try {
+      // Initialize a local variable to hold the sum
+      double sum = 0;
 
-    if (cartModel.value.id.isEmpty) {
-      cartModel.value.id = await _cartService.createCart(cartModel.value);
-    } else {
-      await _cartService.updateCart(cartModel.value);
+      // Only include products that are in the listTemp (selected products)
+      for (var product in cartModel.value.listProduct) {
+        if (listTemp.contains(product.id)) {
+          sum += product.price * product.quantity;
+        }
+      }
+
+      // Format the sum as currency
+      final formatter = NumberFormat.currency(
+        locale: 'vi_VN',
+        symbol: 'VNĐ',
+        decimalDigits: 0,
+      );
+
+      // Return the formatted string
+      return formatter.format(sum);
+    } catch (e) {
+      print('Error calculating total price: $e');
+      return '0 VNĐ';
     }
-
-    cartModel.refresh();
   }
 
   String get getTotalPriceString {
-    totalPrice.value = 0.0;
-
-    for (final ProductModel product in cartModel.value.listProduct) {
-      totalPrice.value +=
-          listTemp.contains(product.id) ? product.price * product.quantity : 0;
-    }
-
-    final formatter = NumberFormat.currency(
-      locale: 'vi_VN',
-      symbol: 'VNĐ',
-      decimalDigits: 0,
-    );
-
-    totalPrice.refresh();
-
-    return formatter.format(totalPrice.value);
+    return calculateTotalPrice();
   }
 
   void removeProduct(ProductModel product) async {
@@ -100,28 +131,52 @@ class CartController extends GetxController {
   }
 
   void updateTotalPrice() {
-    totalPrice.value = cartModel.value.listProduct.fold<double>(
-      0.0,
-      (sum, product) => sum + product.price * product.quantity,
-    );
+    double sum = 0;
+    for (var product in cartModel.value.listProduct) {
+      if (listTemp.contains(product.id)) {
+        sum += product.price * product.quantity;
+      }
+    }
+    totalPrice.value = sum;
   }
 
   Future<void> payment() async {
-    await _cartService.processPayment(cartModel.value, totalPrice.value);
+    try {
+      if (listTemp.isEmpty) {
+        Get.snackbar(
+          'Thông báo',
+          'Vui lòng chọn sản phẩm để thanh toán',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
 
-    await Fluttertoast.showToast(
-      msg: "Thanh toán thành công",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey.shade300,
-      textColor: Colors.black,
-      fontSize: 16.0,
-    );
+      // Lọc sản phẩm đã chọn
+      cartModel.value.listProduct
+          .where((p) => listTemp.contains(p.id))
+          .toList();
 
-    cartModel.value.id = '';
-    cartModel.value.listProduct.clear();
-    cartModel.refresh();
+      // Tạo order mới
+
+      // Gọi API tạo order
+
+      Get.snackbar(
+        'Thành công',
+        'Đặt hàng thành công',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      // Refresh giỏ hàng
+      await getCart();
+    } catch (e) {
+      Get.snackbar(
+        'Lỗi',
+        'Đặt hàng thất bại: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
   void checkAllProductCart({required bool isChecked}) {
@@ -150,15 +205,43 @@ class CartController extends GetxController {
     final index =
         cartModel.value.listProduct.indexWhere((p) => p.id == productId);
     if (index != -1) {
+      final updatedList = [...cartModel.value.listProduct];
       if (isPlus) {
-        cartModel.value.listProduct[index].quantity += 1; // Tăng số lượng
+        updatedList[index].quantity += 1; // Tăng số lượng
       } else {
-        if (cartModel.value.listProduct[index].quantity > 1) {
-          cartModel.value.listProduct[index].quantity -= 1; // Giảm số lượng
+        if (updatedList[index].quantity > 1) {
+          updatedList[index].quantity -= 1; // Giảm số lượng
         }
       }
-      cartModel.refresh();
+
+      cartModel.update((val) {
+        if (val != null) {
+          val.listProduct = updatedList;
+        }
+      });
+
       updateTotalPrice(); // Cập nhật tổng giá
+
+      // Lưu vào database nếu cần
+      if (cartModel.value.id.isNotEmpty) {
+        _cartService.updateCart(cartModel.value);
+      }
+    }
+  }
+
+  void updateQuantity(String productId, bool increase) {
+    final index =
+        cartModel.value.listProduct.indexWhere((p) => p.id == productId);
+    if (index != -1) {
+      final updatedList = [...cartModel.value.listProduct];
+      if (increase) {
+        updatedList[index].quantity++;
+      } else if (updatedList[index].quantity > 1) {
+        updatedList[index].quantity--;
+      }
+      cartModel.update((val) {
+        val?.listProduct = updatedList;
+      });
     }
   }
 }

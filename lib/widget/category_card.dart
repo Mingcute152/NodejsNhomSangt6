@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/theme.dart';
 import 'package:flutter_application_3/controllers/firebase/product_controller.dart';
 import 'package:get/get.dart';
+import 'package:flutter_application_3/theme.dart';
 
 class CategoryCard extends StatelessWidget {
   final String icon;
   final int index;
-  const CategoryCard({
+
+  CategoryCard({
     super.key,
     required this.icon,
     required this.index,
-  });
+  })  : assert(index >= 0, 'Index must be non-negative'),
+        assert(icon.isNotEmpty, 'Icon path cannot be empty');
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductController());
+    final controller = Get.find<ProductController>();
 
     return GestureDetector(
       onTap: () {
-        controller.filterProduct(type: index);
+        try {
+          controller.filterProduct(type: index);
+        } catch (e) {
+          Get.snackbar(
+            'Error',
+            'Unable to filter products',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -37,7 +47,14 @@ class CategoryCard extends StatelessWidget {
               ),
             ],
           ),
-          child: Image.asset(icon, width: 50, height: 50),
+          child: Image.asset(
+            icon,
+            width: 50,
+            height: 50,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.error);
+            },
+          ),
         ),
       ),
     );

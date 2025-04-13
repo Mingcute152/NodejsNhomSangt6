@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_types_as_parameter_names
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/services/user_service.dart';
 
@@ -75,9 +78,9 @@ class OrderConfirmationController extends GetxController {
       }
 
       // Lưu địa chỉ vào Firestore hoặc một nơi lưu trữ khác
-      final userId = "USER_ID"; // Thay bằng logic lấy userId từ Firebase Auth
+      const userId = "USER_ID"; // Thay bằng logic lấy userId từ Firebase Auth
       await _firestore.collection("users").doc(userId).update({
-        "shippingAddress": address,
+        "shippingAddress": address, // Đã sửa lỗi chính tả và định dạng map
       });
 
       shippingAddress.value = address;

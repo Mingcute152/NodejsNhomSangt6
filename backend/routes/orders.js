@@ -2,54 +2,67 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
-const db = admin.firestore();
-const { verifyToken, isAdmin } = require('../middleware/verifyToken');
+const { verifyToken } = require('../middlewares/verifyToken');
 
-// Tạo đơn hàng mới
+// Create order
 router.post('/', verifyToken, async (req, res) => {
     try {
-        const data = {
-            ...req.body,
-            userId: req.user.uid,
+        const { products, totalAmount, shippingAddress } = req.body;
+        const userId = req.user.uid;
+
+        const orderRef = await admin.firestore().collection('orders').add({
+            userId,
+            products,
+            totalAmount,
             status: 'pending',
-            createdAt: new Date().toISOString(),
-        };
-        const doc = await db.collection('orders').add(data);
-        res.status(201).json({ id: doc.id });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+            orderDate: admin.firestore.FieldValue.serverTimestamp(),
+            shippingAddress
+        });
+
+        // Clear user's cart after successful order
+        await admin.firestore().collection('carts').doc(userId).update({
+            products: []
+        });
+
+        res.status(201).json({
+            success: true,
+            orderId: orderRef.id,
+            message: 'Order created successfully'
+        });
+    } catch (error) {
+        console.error('Create order error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 });
 
-// Lấy đơn hàng theo user
-router.get('/my', verifyToken, async (req, res) => {
+// Get user orders
+router.get('/user', verifyToken, async (req, res) => {
     try {
-        const snapshot = await db.collection('orders').where('userId', '==', req.user.uid).get();
-        const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const userId = req.user.uid;
+        const ordersSnapshot = await admin.firestore()
+            .collection('orders')
+            .where('userId', '==', userId)
+            .orderBy('orderDate', 'desc')
+            .get();
+
+        const orders = [];
+        ordersSnapshot.forEach(doc => {
+            orders.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+
         res.status(200).json(orders);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Lấy tất cả đơn hàng (admin)
-router.get('/', verifyToken, isAdmin, async (req, res) => {
-    try {
-        const snapshot = await db.collection('orders').get();
-        const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.status(200).json(orders);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Cập nhật trạng thái đơn hàng (admin)
-router.put('/:id/status', verifyToken, isAdmin, async (req, res) => {
-    try {
-        await db.collection('orders').doc(req.params.id).update({ status: req.body.status });
-        res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+    } catch (error) {
+        console.error('Get orders error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 });
 

@@ -3,14 +3,16 @@ const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
 const db = admin.firestore();
-const { verifyToken } = require('../middleware/verifyToken');
+const { verifyToken } = require('../middlewares/verifyToken');
 
 // Lấy giỏ hàng của user
 router.get('/', verifyToken, async (req, res) => {
     try {
-        const doc = await db.collection('carts').doc(req.user.uid).get();
-        if (!doc.exists) return res.status(200).json({ items: [] });
-        res.status(200).json(doc.data());
+        const snapshot = await db.collection('carts').doc(req.user.uid).get();
+        if (!snapshot.exists) {
+            return res.status(404).json({ message: 'Giỏ hàng trống' });
+        }
+        res.status(200).json(snapshot.data());
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

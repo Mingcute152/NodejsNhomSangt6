@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_application_3/services/auth_service.dart';
+import 'package:get/get.dart';
 
 class ForgotPasswordController extends GetxController {
   final AuthService _authService = AuthService();

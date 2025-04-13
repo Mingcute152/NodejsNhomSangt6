@@ -3,9 +3,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/controllers/firebase/quenmatkhau.dart';
-import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/widget/sign_up.dart';
 import 'package:flutter_application_3/controllers/firebase/user_auth.dart';
+import 'package:flutter_application_3/theme.dart';
+
+import 'package:flutter_application_3/widget/sign_up.dart';
+
 import 'package:flutter_application_3/widget/navbar_root.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

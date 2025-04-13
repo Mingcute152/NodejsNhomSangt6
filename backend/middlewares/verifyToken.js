@@ -1,24 +1,40 @@
 // 📁 middleware/verifyToken.js
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'your_jwt_secret_key'; // ❗ Replace this with env var in production
+const admin = require('firebase-admin');
 
-// Middleware xác thực token
-function verifyToken(req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Token không được cung cấp' });
-
+// Middleware xác thực token Firebase
+async function verifyToken(req, res, next) {
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded; // Gắn info user vào request
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            return res.status(403).json({ error: 'Không tìm thấy token' });
+        }
+
+        // Extract token from 'Bearer TOKEN' format
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(403).json({ error: 'Định dạng token không hợp lệ' });
+        }
+
+        // Verify Firebase token
+        const decodedToken = await admin.auth().verifyIdToken(token);
+
+        // Set user info in request object
+        req.user = {
+            uid: decodedToken.uid,
+            email: decodedToken.email,
+            name: decodedToken.name
+        };
+
         next();
     } catch (error) {
-        res.status(403).json({ error: 'Token không hợp lệ' });
+        console.error('Token verification error:', error);
+        return res.status(401).json({ error: 'Không thể xác thực: ' + error.message });
     }
 }
 
 // Middleware kiểm tra quyền admin
 function isAdmin(req, res, next) {
-    if (req.user?.email === 'admin@gmail.com') {
+    if (req.user?.email?.includes('admin')) {
         next();
     } else {
         res.status(403).json({ error: 'Bạn không có quyền admin' });

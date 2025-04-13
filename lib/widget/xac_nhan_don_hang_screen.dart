@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_application_3/controllers/firebase/order_confirmation_controller.dart';
+import 'package:get/get.dart';
 import 'package:flutter_application_3/model/product_model.dart';
 
 class OrderConfirmation extends StatelessWidget {

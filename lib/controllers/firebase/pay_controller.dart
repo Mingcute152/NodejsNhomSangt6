@@ -1,5 +1,5 @@
-import 'package:get/get.dart';
 import 'package:flutter_application_3/services/pay_service.dart';
+import 'package:get/get.dart';
 
 class PayController extends GetxController {
   final PayService _payService = PayService();

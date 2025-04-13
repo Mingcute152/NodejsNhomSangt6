@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/controllers/firebase/cart_controller.dart';
+
 import 'package:flutter_application_3/model/product_model.dart';
 import 'package:flutter_application_3/theme.dart';
 
@@ -19,158 +20,166 @@ class GioHang extends StatefulWidget {
 }
 
 class GioHangState extends State<GioHang> {
-  int count = 1;
-  final controller = Get.put(CartController());
+  final CartController controller = Get.put(CartController());
+
+  // Add a string variable to store the formatted total price
+  String _formattedTotalPrice = "0 VNĐ";
+  // Subscription for cart changes
+  late final void Function() _cartListener;
 
   @override
   void initState() {
     super.initState();
-    controller.getCart();
+    // Đảm bảo chỉ gọi getCart một lần khi widget được khởi tạo
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getCart();
+      _updateFormattedTotalPrice();
+    });
+
+    // Set up a listener for cart changes that checks if widget is still mounted
+    _cartListener = () {
+      if (mounted) {
+        _updateFormattedTotalPrice();
+      }
+    };
+
+    // Add the listener to the controller's listTemp
+    controller.listTemp.listen((_) {
+      if (mounted) {
+        _updateFormattedTotalPrice();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Clean up resources when widget is disposed
+    super.dispose();
+  }
+
+  // Update the formatted price string with mounted check
+  void _updateFormattedTotalPrice() {
+    if (mounted) {
+      setState(() {
+        _formattedTotalPrice = controller.calculateTotalPrice();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        centerTitle: true,
-        toolbarHeight: 70,
-        leading: const SizedBox(),
-        title: Text(
-          'Giỏ hàng',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        title: const Text('Giỏ hàng'),
+        backgroundColor: greenColor,
       ),
-      backgroundColor: Colors.grey.shade200,
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final products = controller.cartModel.value.listProduct;
+        return Column(
           children: [
             Expanded(
-              child: controller.cartModel.value.listProduct.isEmpty
-                  ? cartEmpty
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
-                          child: Row(
-                            children: [
-                              checkBoxCustom(
-                                isChecked: controller
-                                        .cartModel.value.listProduct.length ==
-                                    controller.listTemp.length,
-                                onTap: () {
-                                  controller.onCheckProductCart(productId: '');
-                                },
-                              ),
-                              SizedBox(width: 12),
-                              Text(
-                                'Chọn tất cả (${controller.listTemp.length})',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                'Tiếp tục mua sắm',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount:
-                                controller.cartModel.value.listProduct.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return cartCard(
-                                isLast: index ==
-                                    controller.cartModel.value.listProduct
-                                            .length -
-                                        1,
-                                product: controller
-                                    .cartModel.value.listProduct[index],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+              child: products.isEmpty
+                  ? _buildEmptyCart()
+                  : ListView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return _buildCartItem(product);
+                      },
                     ),
             ),
+            if (products.isNotEmpty) _buildBottomPaymentSection(),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _buildCartItem(ProductModel product) {
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            // Checkbox
+            Obx(() => Checkbox(
+                  value: controller.listTemp.contains(product.id),
+                  onChanged: (value) {
+                    // Check if widget is still mounted before making changes
+                    // that would trigger a UI update
+                    if (mounted) {
+                      controller.onCheckProductCart(productId: product.id);
+                    }
+                  },
+                )),
+
+            // Product Image
             Container(
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
+                border: Border.all(color: Colors.grey.shade200),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: product.getImageWidget(
+                  fit: BoxFit.cover,
                 ),
               ),
-              padding: EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 16,
-              ),
+            ),
+
+            const SizedBox(width: 12),
+
+            // Product Details
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Phần tổng giá
+                  Text(
+                    product.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    product.priceString,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Thành tiền',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: () => controller.updateQuantiyProduct(
+                          productId: product.id,
+                          isPlus: false,
                         ),
                       ),
                       Text(
-                        controller.getTotalPriceString,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                        '${product.quantity}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: () => controller.updateQuantiyProduct(
+                          productId: product.id,
+                          isPlus: true,
                         ),
                       ),
                     ],
-                  ),
-                  SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => OrderConfirmation(
-                            selectedProducts: const [],
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                    child: const Text(
-                      'Mua hàng',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -181,156 +190,7 @@ class GioHangState extends State<GioHang> {
     );
   }
 
-  Widget cartCard({bool isLast = false, required ProductModel product}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              checkBoxCustom(
-                isChecked: controller.listTemp.contains(product.id),
-                onTap: () {
-                  controller.onCheckProductCart(productId: product.id);
-                },
-              ),
-              SizedBox(width: 12),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border.all(color: Colors.grey.shade200),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.all(5),
-                child: Image.asset(
-                  product.image,
-                  width: 55,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      product.priceString,
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            controller.updateQuantiyProduct(
-                              productId: product.id,
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(10),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(2),
-                            child: Icon(
-                              Icons.remove,
-                              color: Colors.black87,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border(
-                              top: BorderSide(color: Colors.grey.shade400),
-                              bottom: BorderSide(color: Colors.grey.shade400),
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            '${product.quantity}',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.updateQuantiyProduct(
-                              isPlus: true,
-                              productId: product.id,
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(10),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(2),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.black87,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            controller.listTemp.remove(product.id);
-                            controller.removeProduct(product);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (!isLast)
-          Container(
-            color: Colors.grey,
-            height: 0.5,
-            width: double.infinity,
-          ),
-      ],
-    );
-  }
-
-  Widget get cartEmpty {
+  Widget _buildEmptyCart() {
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -397,6 +257,67 @@ class GioHangState extends State<GioHang> {
           Icons.check,
           color: isChecked ? Colors.white : Colors.transparent,
           size: 13,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomPaymentSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Tổng tiền: $_formattedTotalPrice',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    controller.payment();
+                    // Check if widget is still mounted before updating UI
+                    if (mounted) {
+                      _updateFormattedTotalPrice();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: greenColor,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 12,
+                    ),
+                  ),
+                  child: const Text(
+                    'Thanh toán',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

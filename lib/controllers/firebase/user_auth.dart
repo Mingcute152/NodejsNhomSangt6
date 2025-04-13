@@ -35,46 +35,6 @@ class Auth {
     await _firebaseAuth.signOut();
   }
 
-  // Đăng nhập bằng Số điện thoại và mã OTP
-  Future<void> signInWithPhoneNumber({
-    required String phoneNumber,
-  }) async {
-    await _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Tự động đăng nhập nếu OTP được xác nhận tự động
-        await _firebaseAuth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        throw e.message ?? "Đã xảy ra lỗi khi xác minh số điện thoại.";
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        // Lưu lại verificationId để xác nhận mã OTP
-        this.verificationId = verificationId;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Timeout xử lý mã OTP
-        this.verificationId = verificationId;
-      },
-    );
-  }
-
-  // Xác nhận mã OTP
-  Future<void> verifyOtp({
-    required String otp,
-  }) async {
-    if (verificationId != null) {
-      final credential = PhoneAuthProvider.credential(
-          verificationId: verificationId!, smsCode: otp);
-      await _firebaseAuth.signInWithCredential(credential);
-    } else {
-      throw "Không tìm thấy mã xác minh!";
-    }
-  }
-
-  // Biến để lưu lại verificationId khi mã OTP được gửi
-  String? verificationId;
-
   Future<void> deleteAccount() async {
     try {
       User? user = _firebaseAuth.currentUser;

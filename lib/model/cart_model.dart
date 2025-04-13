@@ -9,7 +9,7 @@ import 'package:flutter_application_3/model/product_model.dart';
 class CartModel {
   String id;
   final String userId;
-  final List<ProductModel> listProduct;
+  late final List<ProductModel> listProduct;
   final int status;
   final DateTime? createDate;
   final double? totalPrice;

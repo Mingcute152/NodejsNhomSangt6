@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
 class ProductModel {
   final String id;
@@ -110,5 +111,49 @@ class ProductModel {
         price.hashCode ^
         quantity.hashCode ^
         type.hashCode;
+  }
+
+  String getImageUrl() {
+    if (image.isEmpty) return '';
+
+    // Không thay đổi đường dẫn, chỉ trả về đúng format
+    return image;
+  }
+
+  Widget getImageWidget(
+      {double? width, double? height, BoxFit fit = BoxFit.cover}) {
+    if (image.startsWith('assets/')) {
+      return Image.asset(
+        image,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          print('Asset image error: $error');
+          return Container(
+            width: width,
+            height: height,
+            color: Colors.grey.shade200,
+            child: const Icon(Icons.image_not_supported, color: Colors.grey),
+          );
+        },
+      );
+    } else {
+      return Image.network(
+        image,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          print('Network image error: $error');
+          return Container(
+            width: width,
+            height: height,
+            color: Colors.grey.shade200,
+            child: const Icon(Icons.image_not_supported, color: Colors.grey),
+          );
+        },
+      );
+    }
   }
 }

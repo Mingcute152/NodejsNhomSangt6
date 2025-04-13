@@ -1,106 +1,72 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, duplicate_ignore, sized_box_for_whitespace
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, duplicate_ignore, sized_box_for_whitespace, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/theme.dart';
-import 'package:flutter_application_3/widget/categories.dart';
 import 'package:flutter_application_3/controllers/firebase/product_controller.dart';
-// ignore: unused_import
+
 import 'package:flutter_application_3/widget/products_cart.dart';
-// ignore: unused_import
-import 'package:flutter_application_3/widget/products.dart';
 import 'package:get/get.dart';
 
 class TrangChu extends StatelessWidget {
+  final ProductController controller = Get.put(ProductController());
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductController());
     return Scaffold(
       body: ListView(
         children: [
-          // TrangChu(),
-
-          // ignore: prefer_const_constructors
-          Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 10,
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        // ignore: deprecated_member_use
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ]),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: greenColor,
-                        size: 30,
-                      ),
-                      Container(
-                        height: 50,
-                        width: 300,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Tìm sản phẩm, TPCN cần tìm... ",
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (value) {
-                              controller.searchProduct(name: value);
-                            },
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        Icons.filter_list,
-                        size: 30,
-                      ),
-                    ],
+          // Search Box
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.search, color: Colors.green),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Tìm sản phẩm...",
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                    onChanged: (value) {
+                      controller.searchProducts(value);
+                    },
                   ),
                 ),
-              )),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 1,
-              left: 15,
+              ],
             ),
-            child: Text(
-              "Danh sách",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+          ),
+
+          // Products Grid
+          Obx(() {
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.all(16),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
               ),
-            ),
-          ),
-          //sản phẩm
-          Categories(),
-          //phổ biến
-          Padding(
-            padding: EdgeInsets.only(top: 20, left: 15),
-            child: Text(
-              "Sản phẩm phổ biến",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-          Products(),
+              itemCount: controller.filteredProducts.length,
+              itemBuilder: (context, index) {
+                final product = controller.filteredProducts[index];
+                return ProductsCard(productModel: product);
+              },
+            );
+          }),
         ],
       ),
     );

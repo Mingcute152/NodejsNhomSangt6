@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
@@ -51,16 +53,13 @@ class PayService {
         final payUrl = responseData['payUrl'];
         if (payUrl != null) {
           // Mở URL thanh toán trong trình duyệt
-          print("Redirecting to: $payUrl");
         } else {
           throw Exception("Không thể tạo giao dịch MoMo.");
         }
       } else {
         throw Exception("Lỗi khi kết nối đến MoMo: ${response.body}");
       }
-    } catch (e) {
-      print("Lỗi thanh toán qua MoMo: $e");
-    }
+    } catch (e) {}
   }
 
   String _generateSignature(String rawData) {

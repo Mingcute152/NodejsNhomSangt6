@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/services/auth_service.dart';
 import 'package:flutter_application_3/theme.dart';
+
 import 'package:flutter_application_3/widget/log_in.dart';
-import 'package:flutter_application_3/controllers/firebase/user_auth.dart';
 
 class ManHinhDangKy extends StatefulWidget {
   const ManHinhDangKy({super.key});
@@ -15,10 +18,23 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
   String? errorMessage = '';
   bool _isVisibility = true;
 
+  // Thêm controller cho trường name
+  final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final TextEditingController _controllerConfirmPassword =
       TextEditingController();
+  final AuthService _authService = AuthService();
+
+  // Thêm dispose để giải phóng controllers
+  @override
+  void dispose() {
+    _controllerName.dispose();
+    _controllerEmail.dispose();
+    _controllerPassword.dispose();
+    _controllerConfirmPassword.dispose();
+    super.dispose();
+  }
 
   Future<void> createUserWithEmailAndPassword() async {
     if (_controllerPassword.text.trim() !=
@@ -37,27 +53,25 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
     }
 
     try {
-      await Auth().createUserWithEmailAndPassword(
+      await _authService.registerWithEmailAndPassword(
         email: _controllerEmail.text.trim(),
         password: _controllerPassword.text.trim(),
+        name: _controllerName.text.trim(), // Thêm field name nếu cần
       );
 
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Tạo tài khoản thành công!"),
+          content: Text("Đăng ký thành công!"),
           backgroundColor: Colors.green,
         ),
       );
 
-      // ignore: use_build_context_synchronously
       Navigator.pop(context); // Quay lại màn hình đăng nhập
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
       });
 
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage!),
