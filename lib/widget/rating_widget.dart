@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/model/rating_model.dart';
 import 'package:flutter_application_3/services/rating_service.dart';
@@ -5,17 +7,16 @@ import 'package:flutter_application_3/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class RatingWidget extends StatefulWidget {
   final String productId;
   final Function(double) onRatingChanged;
 
   const RatingWidget({
-    Key? key,
+    super.key,
     required this.productId,
     required this.onRatingChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<RatingWidget> createState() => _RatingWidgetState();

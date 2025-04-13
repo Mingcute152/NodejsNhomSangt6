@@ -30,6 +30,9 @@ class _TaiKhoanState extends State<TaiKhoan> {
     super.initState();
     _user = _auth.currentUser; // Lấy thông tin người dùng hiện tại
     _checkAdmin(); // Kiểm tra quyền admin
+    FirebaseAuth.instance.currentUser
+        ?.getIdToken()
+        .then((token) => print("TOKEN: $token"));
   }
 
   // Kiểm tra người dùng có quyền admin không

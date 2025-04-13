@@ -6,10 +6,10 @@ import 'dart:convert';
 
 class AuthService {
   // For Android emulator use 10.0.2.2
-  static const String baseUrl = 'http://192.168.1.234:3000/api';
+  static const String baseUrl = 'http://192.168.1.234:3001/api';
 
   // For physical device, use your computer's actual IP address
-  // static const String baseUrl = 'http://192.168.1.234:3000/api';
+  // static const String baseUrl = 'http://192.168.1.234:3001/api';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 

@@ -122,38 +122,77 @@ class ProductModel {
 
   Widget getImageWidget(
       {double? width, double? height, BoxFit fit = BoxFit.cover}) {
-    if (image.startsWith('assets/')) {
-      return Image.asset(
-        image,
-        width: width,
-        height: height,
-        fit: fit,
-        errorBuilder: (context, error, stackTrace) {
-          print('Asset image error: $error');
-          return Container(
-            width: width,
-            height: height,
-            color: Colors.grey.shade200,
-            child: const Icon(Icons.image_not_supported, color: Colors.grey),
-          );
-        },
-      );
-    } else {
-      return Image.network(
-        image,
-        width: width,
-        height: height,
-        fit: fit,
-        errorBuilder: (context, error, stackTrace) {
-          print('Network image error: $error');
-          return Container(
-            width: width,
-            height: height,
-            color: Colors.grey.shade200,
-            child: const Icon(Icons.image_not_supported, color: Colors.grey),
-          );
-        },
-      );
+    try {
+      // Case 1: Asset image (path starts with 'assets/')
+      if (image.startsWith('assets/')) {
+        return Image.asset(
+          image,
+          width: width,
+          height: height,
+          fit: fit,
+          errorBuilder: (context, error, stackTrace) {
+            print('Asset image error: $error');
+            return _buildErrorContainer(width, height);
+          },
+        );
+      }
+      // Case 2: Empty or invalid image path
+      else if (image.isEmpty) {
+        return _buildErrorContainer(width, height);
+      }
+      // Case 3: Network image
+      else {
+        return Image.network(
+          image,
+          width: width,
+          height: height,
+          fit: fit,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              width: width,
+              height: height,
+              color: Colors.grey.shade200,
+              child: Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            print('Network image error for path $image: $error');
+            return _buildErrorContainer(width, height);
+          },
+        );
+      }
+    } catch (e) {
+      print('Exception loading image $image: $e');
+      return _buildErrorContainer(width, height);
     }
+  }
+
+  // Helper method for error placeholder
+  Widget _buildErrorContainer(double? width, double? height) {
+    return Container(
+      width: width,
+      height: height,
+      color: Colors.grey.shade200,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.image_not_supported, color: Colors.grey),
+          if (width != null && width > 60)
+            Text(
+              'Image not available',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            ),
+        ],
+      ),
+    );
   }
 }

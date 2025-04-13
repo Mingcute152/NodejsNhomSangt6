@@ -79,15 +79,16 @@ class CartController extends GetxController {
 
   String calculateTotalPrice() {
     try {
-      // Initialize a local variable to hold the sum
-      double sum = 0;
-
-      // Only include products that are in the listTemp (selected products)
-      for (var product in cartModel.value.listProduct) {
+      // Tính tổng giá cho các sản phẩm được chọn
+      double sum = 0.0;
+      for (final ProductModel product in cartModel.value.listProduct) {
         if (listTemp.contains(product.id)) {
           sum += product.price * product.quantity;
         }
       }
+
+      // Cập nhật giá trị totalPrice
+      totalPrice.value = sum;
 
       // Format the sum as currency
       final formatter = NumberFormat.currency(
@@ -226,22 +227,6 @@ class CartController extends GetxController {
       if (cartModel.value.id.isNotEmpty) {
         _cartService.updateCart(cartModel.value);
       }
-    }
-  }
-
-  void updateQuantity(String productId, bool increase) {
-    final index =
-        cartModel.value.listProduct.indexWhere((p) => p.id == productId);
-    if (index != -1) {
-      final updatedList = [...cartModel.value.listProduct];
-      if (increase) {
-        updatedList[index].quantity++;
-      } else if (updatedList[index].quantity > 1) {
-        updatedList[index].quantity--;
-      }
-      cartModel.update((val) {
-        val?.listProduct = updatedList;
-      });
     }
   }
 }

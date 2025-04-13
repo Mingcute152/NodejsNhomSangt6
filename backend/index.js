@@ -39,6 +39,11 @@ try {
 // Routes
 app.use('/api/products', require('./routes/products'));
 app.use('/api/ratings', require('./routes/ratings'));
+app.use('/api/debug', require('./routes/debug'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/cart', require('./routes/cart'));
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -46,7 +51,7 @@ app.get('/health', (req, res) => {
 });
 
 // Khởi động server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Health check available at: http://localhost:${PORT}/health`);

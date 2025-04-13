@@ -21,34 +21,16 @@ class GioHang extends StatefulWidget {
 
 class GioHangState extends State<GioHang> {
   final CartController controller = Get.put(CartController());
-
-  // Add a string variable to store the formatted total price
   String _formattedTotalPrice = "0 VNĐ";
-  // Subscription for cart changes
-  late final void Function() _cartListener;
 
   @override
   void initState() {
     super.initState();
-    // Đảm bảo chỉ gọi getCart một lần khi widget được khởi tạo
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getCart();
-      _updateFormattedTotalPrice();
-    });
+    _updateFormattedTotalPrice();
 
-    // Set up a listener for cart changes that checks if widget is still mounted
-    _cartListener = () {
-      if (mounted) {
-        _updateFormattedTotalPrice();
-      }
-    };
-
-    // Add the listener to the controller's listTemp
-    controller.listTemp.listen((_) {
-      if (mounted) {
-        _updateFormattedTotalPrice();
-      }
-    });
+    // Lắng nghe thay đổi từ cart và cập nhật giá
+    ever(controller.cartModel, (_) => _updateFormattedTotalPrice());
+    ever(controller.listTemp, (_) => _updateFormattedTotalPrice());
   }
 
   @override
@@ -57,13 +39,10 @@ class GioHangState extends State<GioHang> {
     super.dispose();
   }
 
-  // Update the formatted price string with mounted check
   void _updateFormattedTotalPrice() {
-    if (mounted) {
-      setState(() {
-        _formattedTotalPrice = controller.calculateTotalPrice();
-      });
-    }
+    setState(() {
+      _formattedTotalPrice = controller.calculateTotalPrice();
+    });
   }
 
   @override

@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'dart:math' as math;
-import 'package:http/http.dart' as http;
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter_application_3/model/rating_model.dart';
 
 class RatingService {
