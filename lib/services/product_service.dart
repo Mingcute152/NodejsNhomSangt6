@@ -6,7 +6,7 @@ import 'package:flutter_application_3/model/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProductService {
-  static const String baseUrl = 'http://192.168.1.234:3000/api';
+  static const String baseUrl = 'http://192.168.1.234:3001/api';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Lấy danh sách sản phẩm từ API Node.js

@@ -12,7 +12,7 @@ class RatingService {
   final String baseUrl;
 
   // Default API base URL - using the local network IP instead of localhost
-  static const String defaultBaseUrl = 'http://192.168.56.1:3000/api';
+  static const String defaultBaseUrl = 'http://192.168.1.234:3001/api';
 
   // List of possible server addresses to try - ordered by priority
   static const List<String> possibleServers = [

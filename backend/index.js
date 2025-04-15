@@ -2,9 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebase-service-account.json');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
+
+// Security middleware
+app.use(helmet());
 
 // Cấu hình CORS chi tiết
 app.use(cors({
@@ -14,6 +19,14 @@ app.use(cors({
     credentials: true,
     maxAge: 86400 // 24 giờ
 }));
+
+// Rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later'
+});
+app.use(limiter);
 
 // Cấu hình body parser với giới hạn lớn hơn
 app.use(express.json({ limit: '50mb' }));
@@ -48,6 +61,20 @@ app.use('/api/cart', require('./routes/cart'));
 // Health check route
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'Server is running' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong!'
+    });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not Found' });
 });
 
 // Khởi động server

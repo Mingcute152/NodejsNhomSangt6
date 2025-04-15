@@ -3,7 +3,6 @@ analyzer:
   errors:
     avoid_print: ignore
     use_build_context_synchronously: ignore
-    use_build_context_synchronously: ignore
 include: package:flutter_lints/flutter.yaml
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.

@@ -9,7 +9,7 @@ import 'package:flutter_application_3/model/user_model.dart';
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  static const String baseUrl = 'http://192.168.1.234:3000/api';
+  static const String baseUrl = 'http://192.168.1.234:3001/api';
 
   // Thêm phương thức getToken
   Future<String> getToken() async {

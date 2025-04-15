@@ -4,7 +4,7 @@ import '../model/order_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class OrderService {
-  static const String baseUrl = 'http://192.168.1.234:3000/api';
+  static const String baseUrl = 'http://192.168.1.234:3001/api';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<String?> getToken() async {
